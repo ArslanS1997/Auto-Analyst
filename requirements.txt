@@ -1,6 +1,6 @@
 dspy_ai==2.4.9
 llama_index==0.10.53
-numpy==2.0.0
+numpy==1.22.3
 pandas==2.2.2
 plotly==5.9.0
 statsmodels==0.14.2
