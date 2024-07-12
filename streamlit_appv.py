@@ -127,9 +127,9 @@ if 'load' not in st.session_state:
 
 agents =[preprocessing_agent,statistical_analytics_agent,sk_learn_agent,data_viz_agent]
 
-dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key ="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",max_tokens=10000 ) )
+dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =st.secrets("GROQ_API_KEY"),max_tokens=10000 ) )
 
-Settings.embed_model = OpenAIEmbedding(api_key='sk-proj-iZICe72trRYdwjB0AB6wT3BlbkFJd98z3nzkRv69ZhkV8VVj')
+Settings.embed_model = OpenAIEmbedding(api_key=st.secrets("OPENAI_API_KEY"))
 
 
 
@@ -172,7 +172,7 @@ if st.session_state['fix_button'] == 0:
                 
             else:
                 if desc=='' and count==0:
-                    st.write("Write a description of 100 words")
+                    st.write("Write a description of atleast 30-40 words, describe in detail the context surrounding the data, also add description about the column names")
                     count+=1
                 
 
