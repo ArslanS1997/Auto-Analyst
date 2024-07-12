@@ -10,6 +10,8 @@ import sys
 from io import StringIO
 import contextlib
 import time
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.core import Settings
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -104,10 +106,11 @@ def begin_execution(user_goal,auto_analyst_agent):
 
 
 
-from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.core import Settings
+
 
 retrievers = {}
+
+
 
 style_index =  VectorStoreIndex.from_documents(styling_instructions)
 # documents = reader.load_data(input_file='dataframe.json')
