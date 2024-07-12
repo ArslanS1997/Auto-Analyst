@@ -4,7 +4,7 @@ from llama_index.core import Document
 import pandas as pd
 import numpy as np
 import datetime
-
+import streamlit as st
 
 
 def return_vals(df,c):
@@ -123,6 +123,7 @@ Document(text="""
        
          ]
 
+Settings.embed_model = OpenAIEmbedding(api_key=st.secrets("OPENAI_API_KEY"))
 
 retrievers = {}
 
