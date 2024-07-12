@@ -62,7 +62,9 @@ def fix_code_increment(e, execution, user_given_context):
                 st.write('.')
         
     except:
+        e = traceback.format_exc()
         st.write("Unable to Fix based on context and error description")
+        st.markdown("This was the error generated "+str(e[:1500]))
         if st.button("Try Again?"):
             context = st.text_input("Rephrase the error")
             fix_code_increment(e,execution, context)
@@ -212,7 +214,7 @@ def get_data(uploaded_df):
 
 
 
-st.write(st.session_state)
+# st.write(st.session_state)
 execution =''
 count =0
 st.title("Auto-Analyst - Let the AI do all the heavy lifting")
@@ -226,7 +228,7 @@ if st.session_state['fix_button'] == 0:
         if st.session_state['load'] == 0 :
                 
             uploaded_df = pd.read_csv(uploaded_file, parse_dates=True, infer_datetime_format=True)
-            df = get_data(uploaded_df)
+            st.session_state['df'] = get_data(uploaded_df)
             st.write(uploaded_df.head())
             desc = st.text_input("Write a description for the uploaded dataset")
             st.button("Start Analysis", on_click=start_analysis)
