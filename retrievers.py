@@ -27,17 +27,21 @@ def correct_num(df,c):
 
 def make_data(df, desc):
     dict_ = {}
+    dict_['df_name'] = 'df'
+    dict_['Description'] = desc
+    dict_['all_column_names'] = str(list(df.columns))
+    dict_['columns_null_count'] = str(dict(df.isnull().sum().sort_values(ascending=False)[:10])).strip()
 
 
         
     for c in df.columns:
-        if df[c].isnull().all():
-            df[c] = 'Null'
+        # if df[c].isnull().all():
+        #     df[c] = 'Null'
         df[c] = correct_num(df,c)
         
         # type = type(df[c])
         dict_[c] = {'column_name':c,'type':str(type(df[c].iloc[0])), 'column_information':return_vals(df,c)}
-    dict_['Description'] = desc
+    
     return dict_
 
 
@@ -123,8 +127,13 @@ Document(text="""
        
          ]
 
+# Settings.embed_model = OpenAIEmbedding(api_key=st.secrets("OPENAI_API_KEY"))
 
+# retrievers = {}
 
-
+# style_index =  VectorStoreIndex.from_documents(styling_instructions)
+# # documents = reader.load_data(input_file='dataframe.json')
+# retrievers['style_index'] = style_index
+# retrievers['dataframe_index'] = VectorStoreIndex.from_documents(documents)
 
 
