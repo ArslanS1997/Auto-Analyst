@@ -131,9 +131,9 @@ def begin_execution(user_goal,auto_analyst_agent):
 
 agents =[preprocessing_agent,statistical_analytics_agent,sk_learn_agent,data_viz_agent]
 
-dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =os.environ.get("GROQ_API_KEY"),max_tokens=10000 ) )
+dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =st.secrets["GROQ_API_KEY"],max_tokens=10000 ) )
 
-Settings.embed_model = OpenAIEmbedding(api_key=os.environ["OPENAI_API_KEY"])
+Settings.embed_model = OpenAIEmbedding(api_key=st.secrets["OPENAI_API_KEY"])
 
 retrievers = {}
 
