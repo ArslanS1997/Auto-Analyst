@@ -10,6 +10,8 @@ import sys
 from io import StringIO
 import contextlib
 import time
+from groq import Groq
+
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
