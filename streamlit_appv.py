@@ -107,6 +107,12 @@ def begin_execution(user_goal,auto_analyst_agent):
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import Settings
 
+retrievers = {}
+
+style_index =  VectorStoreIndex.from_documents(styling_instructions)
+# documents = reader.load_data(input_file='dataframe.json')
+retrievers['style_index'] = style_index
+
 
 if 'new_analysis' not in st.session_state:
     st.session_state['new_analysis'] = 0
