@@ -5,3 +5,4 @@ pandas==2.2.2
 plotly==5.9.0
 statsmodels==0.14.2
 streamlit==1.36.0
+groq==0.8.0
