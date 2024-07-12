@@ -3,7 +3,5 @@ llama_index==0.10.53
 numpy==2.0.0
 pandas==2.2.2
 plotly==5.9.0
-statsmodels==0.14.0
 statsmodels==0.14.2
-streamlit==1.30.0
 streamlit==1.36.0
