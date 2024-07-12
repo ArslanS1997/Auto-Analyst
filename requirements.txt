@@ -6,3 +6,4 @@ plotly==5.9.0
 statsmodels==0.14.2
 streamlit==1.36.0
 groq==0.8.0
+scikit-learn==1.2.2
