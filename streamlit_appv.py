@@ -10,8 +10,6 @@ import sys
 from io import StringIO
 import contextlib
 import time
-from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.core import Settings
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -106,11 +104,16 @@ def begin_execution(user_goal,auto_analyst_agent):
 
 
 
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.core import Settings\
 
+agents =[preprocessing_agent,statistical_analytics_agent,sk_learn_agent,data_viz_agent]
+
+dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =st.secrets("GROQ_API_KEY"),max_tokens=10000 ) )
+
+Settings.embed_model = OpenAIEmbedding(api_key=st.secrets("OPENAI_API_KEY"))
 
 retrievers = {}
-
-
 
 style_index =  VectorStoreIndex.from_documents(styling_instructions)
 # documents = reader.load_data(input_file='dataframe.json')
@@ -134,11 +137,7 @@ if 'load' not in st.session_state:
 # if 'auto_analyst_'
 
 
-agents =[preprocessing_agent,statistical_analytics_agent,sk_learn_agent,data_viz_agent]
 
-dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =st.secrets("GROQ_API_KEY"),max_tokens=10000 ) )
-
-Settings.embed_model = OpenAIEmbedding(api_key=st.secrets("OPENAI_API_KEY"))
 
 
 
