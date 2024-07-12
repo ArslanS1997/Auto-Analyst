@@ -46,13 +46,21 @@ def fix_code_increment(e, execution, user_given_context):
     else:
         execution=fixed_code.fixed_code.split('```')[0].replace('python','').replace('Python','').replace('```','')
     try:
+        st.write("Begin writing the fixed code")
         if execution!='':
             with stdoutIO() as s:
                 exec(execution)
             st.markdown(s.getvalue().replace('#','#####'))
             st.plotly_chart(fig)
     except:
-        st.session_state['user_goal'] = st.chat_input("Start a new Analysis")
+        st.write("Unable to Fix based on context and error description")
+        if st.button("Try Again?"):
+            context = st.text_input("Rephrase the error")
+            fix_code_increment(e,execution, context)
+        if st.button("New Analysis"):
+            reset_everything()
+            
+        
     st.write(st.session_state)
     # st.session_state['load'] = 1
     st.session_state['fix_button'] = 0
@@ -149,9 +157,11 @@ if 'load' not in st.session_state:
 st.write(st.session_state)
 execution =''
 count = 0
+st.title("Auto-Analyst")
+uploaded_file = st.file_uploader("Upload your file here...")
 if st.session_state['fix_button'] == 0:
-    st.title("Auto-Analyst")
-    uploaded_file = st.file_uploader("Upload your file here...")
+    
+
     # e =''
     # user_given_context =''
     if uploaded_file:
