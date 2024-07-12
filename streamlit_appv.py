@@ -72,7 +72,7 @@ def fix_code_increment(e, execution, user_given_context):
             reset_everything()
             
         
-    st.write(st.session_state)
+    # st.write(st.session_state)
     # st.session_state['load'] = 1
     st.session_state['fix_button'] = 0
     # reset_everything()
@@ -86,7 +86,7 @@ def start_analysis():
 def begin_execution(user_goal,auto_analyst_agent):
     # st.write(st.session_state['user_goal'])
     st.session_state['begin_execution'] = 1
-    st.write(st.session_state['user_goal'])
+    # st.write(st.session_state['user_goal'])
     # user_goal = 
     if st.session_state['begin_execution']==1:
             st.write("Start working on user-goal :")
@@ -217,7 +217,7 @@ def get_data(uploaded_df):
 # st.write(st.session_state)
 execution =''
 count =0
-st.title("Auto-Analyst - Let the AI do all the heavy lifting")
+st.title("Auto-Analyst - Let the AI do the heavy lifting")
 uploaded_file = st.file_uploader("Upload your file here...")
 if st.session_state['fix_button'] == 0:
     
