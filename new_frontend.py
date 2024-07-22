@@ -66,7 +66,7 @@ st.title("Auto-Analyst")
     # 
 st.logo('Auto-analysts icon small.png')
 st.sidebar.title(":white[Auto-Analyst] ")
-st.sidebar.text("Have all your Data Sciences ")
+st.sidebar.text("Have all your Data Science ")
 st.sidebar.text("Analysis Done!")
 uploaded_file = st.file_uploader("Upload your file here...")
 retrievers = {}
