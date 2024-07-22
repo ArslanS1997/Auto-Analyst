@@ -13,15 +13,15 @@ import sys
 import plotly as px
 def reset_everything():
     st.cache_data.clear()
-    for key in st.session_state.keys():
-        if isinstance(st.session_state[key],str):
-            st.session_state[key] =''
-        elif isinstance(st.session_state[key],list):
-            st.session_state[key] =[]
-        elif isinstance(st.session_state[key],dict):
-            st.session_state[key] = {}
-        elif isinstance(st.session_state[key],int):
-            st.session_state[key] = 0
+    # for key in st.session_state.keys():
+    #     if isinstance(st.session_state[key],str):
+    #         st.session_state[key] =''
+    #     elif isinstance(st.session_state[key],list):
+    #         st.session_state[key] =[]
+    #     elif isinstance(st.session_state[key],dict):
+    #         st.session_state[key] = {}
+    #     elif isinstance(st.session_state[key],int):
+    #         st.session_state[key] = 0
 
 
         # elif isinstance(st.session_state[key],pd.DataFrame()):
@@ -90,7 +90,7 @@ st.title("Auto-Analyst")
     # 
 st.logo('Auto-analysts icon small.png')
 st.sidebar.title(":white[Auto-Analyst] ")
-st.sidebar.text("Have all your Data Sciences ")
+st.sidebar.text("Have all your Data Science ")
 st.sidebar.text("Analysis Done!")
 uploaded_file = st.file_uploader("Upload your file here...", on_change=reset_everything())
 retrievers = {}
