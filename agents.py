@@ -75,6 +75,7 @@ df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
 
 class statistical_analytics_agent(dspy.Signature):
     """ 
+
     You are a statistical analytics agent. Your task is to take a dataset and a user-defined goal and output Python code that performs the appropriate statistical analysis to achieve that goal. Follow these guidelines:
 
 Data Handling:
@@ -107,7 +108,7 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 
-def statistical_analysis(X, y, goal, period=None):
+def statistical_model(X, y, goal, period=None):
     try:
         # Check for missing values and handle them
         X = X.dropna()
