@@ -21,8 +21,33 @@ def stdoutIO(stdout=None):
     yield stdout
     sys.stdout = old
 
+st.markdown("""
+<style>
+    [data-testid=stSidebar] {
+        background-color: #ff8080;
+        color: #ffffff;
+        title-color:#ffffff
+    }
+</style>
+<style>
+  [data-testid=stSidebar] h1 {
+    color: #ffffff
 
+   }
+</style>
+""", unsafe_allow_html=True)
 
+# custom_css = """
+# <style>
+#     /* Change sidebar title color */
+#     .css-1d391kg .css-1hynsz9 {  /* Streamlit sidebar title class */
+#         color: #ffffff;  /* Your desired color */
+#     }
+# </style>
+# """
+
+# # Inject the custom CSS into the app
+# st.markdown(custom_css, unsafe_allow_html=True)
 # Load the pre-trained conversational model
 agent_names= [data_viz_agent,sk_learn_agent,statistical_analytics_agent,preprocessing_agent]
 dspy.configure(lm = dspy.OpenAI(model='gpt-4o-mini',api_key=os.environ['OPENAI_API_KEY'], max_tokens=4096))
@@ -30,9 +55,19 @@ dspy.configure(lm = dspy.OpenAI(model='gpt-4o-mini',api_key=os.environ['OPENAI_A
 # dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =os.environ.get("GROQ_API_KEY"),max_tokens=10000 ) )
 
 Settings.embed_model = OpenAIEmbedding(api_key=os.environ["OPENAI_API_KEY"])
-st.title("Auto-Analyst - Let the AI do all the heavy lifting")
-st.sidebar.title("Auto-Analyst")
-st.sidebar.text("Have all your Data Sciences Analysis Done!")
+
+# with st.columns(3):
+st.image('Auto-analysts icon small.png', width=70)
+st.title("Auto-Analyst")
+    
+    # st.markdown("<h1 style='text-align: center; color: black;'>Auto-Analyst</h1>", unsafe_allow_html=True)
+
+
+    # 
+st.logo('Auto-analysts icon small.png')
+st.sidebar.title(":white[Auto-Analyst] ")
+st.sidebar.text("Have all your Data Sciences ")
+st.sidebar.text("Analysis Done!")
 uploaded_file = st.file_uploader("Upload your file here...")
 retrievers = {}
 # df = pd.read_csv('open_deals_min2.csv')
@@ -75,10 +110,10 @@ def save():
 # Streamlit app
 def run_chat():
    
-    # st.image('logo.png', width=150)
+    
 
     # st.sidebar.text(" RevTech tools!")
-    # st.logo('logo.jpg')
+    
 
 
 
@@ -112,8 +147,8 @@ def run_chat():
                     #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[0].replace('python','').replace('Python','').replace('```',''))
 
                 st.markdown(s.getvalue().replace('#','########'))
-                if 'fig' in output['code_combiner_agent'].refined_complete_code:
-                    st.plotly_chart(fig)
+                # if 'fig' in output['code_combiner_agent'].refined_complete_code:
+                #     st.plotly_chart(fig)
                 
 
             except:
