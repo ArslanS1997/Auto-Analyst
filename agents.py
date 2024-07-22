@@ -44,10 +44,25 @@ Handle null values in the dataset, applying the correct logic for numeric and ca
 Convert string dates to datetime format.
 Create a correlation matrix that only includes numeric columns.
 Use the correct column names according to the dataset.
-Output:
 
 The generated Python code should be concise, readable, and follow best practices for data preprocessing and introductory analysis. 
 The code should be written using NumPy and Pandas libraries, and should not read the CSV file into the dataframe (it is already loaded as df).
+When splitting numerical and categorical use this script:
+
+categorical_columns = df.select_dtypes(include=[object, 'category']).columns.tolist()
+numeric_columns = df.select_dtypes(include=[np.number]).columns.tolist()
+
+DONOT 
+
+Use this to handle conversion to Datetime
+def safe_to_datetime(date):
+    try:
+        return pd.to_datetime(date,errors='coerce', cache=False)
+    except (ValueError, TypeError):
+        return pd.NaT
+
+df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
+
 
 
 
@@ -59,7 +74,7 @@ The code should be written using NumPy and Pandas libraries, and should not read
 
 
 class statistical_analytics_agent(dspy.Signature):
-    """ You are a statistical analytics agent. 
+    """ You are a statistical analytics agent. You give executable code to a user!
     Your task is to take a dataset and a user-defined goal, and output 
     Do not add data visualization code
     Always handle strings as categorical variables in a regression
@@ -67,11 +82,13 @@ class statistical_analytics_agent(dspy.Signature):
     Python code that performs the appropriate statistical analysis to achieve that goal.
     You should use the Python statsmodel library
     You must also set period x while doing seasonal decompose, also make sure observation numbers work
+    Don't change the index of the dataframe!
     Convert X, Y into float when fitting model using something similar to this
     sm.MODEL(y.astype(float), X.astype(float))
     Use, categorical when dealing with strings
 
     Make sure your output is as intended!
+    It should be executable!
 
     """
     dataset = dspy.InputField(desc="Available datasets loaded in the system, use this df,columns  set df as copy of df")
@@ -101,9 +118,11 @@ class story_teller_agent(dspy.Signature):
 
 class code_combiner_agent(dspy.Signature):
     """ You are a code combine agent, taking Python code output from many agents and combining the operations into 1 output
-    You also fix any errors in the code. Also handle if a column has more than 10 categories, by combining the rest into one called `other`
+    You also fix any errors in the code. 
+
 
     Double check column_names/dtypes using dataset, also check if applied logic works for the datatype
+    df.copy = df.copy()
 
     Make sure your output is as intended!
     
@@ -118,6 +137,9 @@ class data_viz_agent(dspy.Signature):
     You are AI agent who uses the goal to generate data visualizations in Plotly.
     You have to use the tools available to your disposal
     If row_count of dataset > 50000, use sample while visualizing 
+    use this
+    if len(df)>50000:
+        .......
     Only this agent does the visualization
     Also only use x_axis/y_axis once in update layout
     {dataset}
@@ -140,6 +162,7 @@ class code_fix(dspy.Signature):
     You take the faulty code, and the error generated and generate the fixed code that performs the exact analysis the faulty code intends to do
     You are also give user given context that guides you how to fix the code!
     Return not just the fixed code but the fixed code base! Do not ignore this!
+    The dataframe is loaded as df.copy = st.session_state['df']
 
     please reflect on the errors of the AI agent and then generate a 
    correct step-by-step solution to the problem.
@@ -189,6 +212,9 @@ class auto_analyst(dspy.Module):
         my_bar = st.progress(0, text="**Planner Agent Working on devising a plan**")
         plan = self.planner(goal =dict_['goal'], dataset=dict_['dataset'], Agent_desc=dict_['Agent_desc'] )
         st.write("**This is the proposed plan**")
+        st.session_state.messages.append(f"planner['plan']: {plan['plan']}")
+        st.session_state.messages.append(f"planner['plan_desc']: {plan['plan_desc']}")
+
         # st.write(plan.plan)
         len_ = len(plan.plan.split('->'))+2
         percent_complete += 1/len_
@@ -208,25 +234,36 @@ class auto_analyst(dspy.Module):
             plan_list = plan_text.split('->')
         else:
             refined_goal = self.refine_goal(dataset=dict_['dataset'], goal=dict_['goal'], Agent_desc= dict_['Agent_desc'])
-            forward(query=refined_goal)
+            st.session_state.messages.append(f"refined_goal: {refined_goal.refined_goal}")
+
+            self.forward(query=refined_goal.refined_goal)
 
         for p in plan_list:
             inputs = {x:dict_[x] for x in self.agent_inputs[p.strip()]}
             output_dict[p.strip()]=self.agents[p.strip()](**inputs)
             # st.write("This is the "+p.strip())
             code = output_dict[p.strip()].code
+            
             # st.write("This is the generated Code"+ code)
             commentary = output_dict[p.strip()].commentary
             st.write('**'+p.strip().capitalize().replace('_','  ')+' -  is working on this analysis....**')
+            st.session_state.messages.append(f"{p.strip()}['code']: {output_dict[p.strip()].code}")
+            st.session_state.messages.append(f"{p.strip()}['commentary']: {output_dict[p.strip()].commentary}")
+
+
             st.write(commentary.replace('#',''))
+            st.code(code)
             percent_complete += 1/len_
             my_bar.progress(percent_complete)
             code_list.append(code)
             analysis_list.append(commentary)
+        st.write("Combining all code into one")
         output_dict['code_combiner_agent'] = self.code_combiner_agent(agent_code_list = str(code_list), dataset=dict_['dataset'])
+        st.session_state.messages.append(f"code_combiner_agent: {output_dict['code_combiner_agent']}")
         my_bar.progress(percent_complete + 1/len_, text=" Combining WorkFlow")
         # st.markdown(output_dict)
         output_dict['story_teller_agent'] = self.story_telleer(agent_analysis_list = str(analysis_list))
+        st.session_state.messages.append(f"story_teller_agent: {output_dict['story_teller_agent']}")
         my_bar.progress(100, text=" Compiling the story")
         
         return output_dict

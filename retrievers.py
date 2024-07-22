@@ -1,6 +1,5 @@
 from llama_index.core import VectorStoreIndex
 # from llama_index.core.readers.json import JSONReader
-from llama_index.core import Document
 import pandas as pd
 import numpy as np
 import datetime
@@ -27,10 +26,11 @@ def correct_num(df,c):
 
 def make_data(df, desc):
     dict_ = {}
-    dict_['df_name'] = 'df'
+    dict_['df_name'] = "The data is loaded as df"
     dict_['Description'] = desc
-    dict_['all_column_names'] = str(list(df.columns))
-    dict_['columns_null_count'] = str(dict(df.isnull().sum().sort_values(ascending=False)[:10])).strip()
+    dict_['dataframe_head_view'] = df.head(10).to_markdown()
+    # dict_['all_column_names'] = str(list(df.columns))
+    # dict_['columns_null_count'] = str(dict(df.isnull().sum().sort_values(ascending=False)[:10])).strip()
 
 
         
@@ -42,13 +42,14 @@ def make_data(df, desc):
         # type = type(df[c])
         dict_[c] = {'column_name':c,'type':str(type(df[c].iloc[0])), 'column_information':return_vals(df,c)}
     
+    
     return dict_
 
 
 
 
 styling_instructions =[
-    Document(text="""
+    """
         Dont ignore any of these instructions.
         For a line chart always use plotly_white template, reduce x axes & y axes line to 0.2 & x & y grid width to 1. 
         Always give a title and make bold using html tag axis label and try to use multiple colors if more than one line
@@ -58,8 +59,8 @@ styling_instructions =[
         Default size of chart should be height =1200 and width =1000
         
         """
-        )
-   , Document(text="""
+        
+   , """
         Dont ignore any of these instructions.
         For a bar chart always use plotly_white template, reduce x axes & y axes line to 0.2 & x & y grid width to 1. 
         Always give a title and make bold using html tag axis label 
@@ -67,9 +68,9 @@ styling_instructions =[
         Annotate the values of the bar chart
         If variable is a percentage show in 2 decimal points with '%' sign.
         Default size of chart should be height =1200 and width =1000
-        """)
+        """
         ,
-Document(text=
+
           """
         For a histogram chart choose a bin_size of 50
         Do not ignore any of these instructions
@@ -78,9 +79,9 @@ Document(text=
         Always display numbers in thousand(K) or Million(M) if larger than 1000/100000. Add annotations x values
         If variable is a percentage show in 2 decimal points with '%'
         Default size of chart should be height =1200 and width =1000
-        """),
+        """,
 
-Document(text=
+
           """
         For a pie chart only show top 10 categories, bundle rest as others
         Do not ignore any of these instructions
@@ -89,8 +90,8 @@ Document(text=
         Always display numbers in thousand(K) or Million(M) if larger than 1000/100000. Add annotations x values
         If variable is a percentage show in 2 decimal points with '%'
         Default size of chart should be height =1200 and width =1000
-        """),
-Document(text=
+        """,
+
           """
         Do not ignore any of these instructions
         always use plotly_white template, reduce x & y axes line to 0.2 & x & y grid width to 1. 
@@ -99,8 +100,8 @@ Document(text=
         Don't add K/M if number already in , or value is not a number
         If variable is a percentage show in 2 decimal points with '%'
         Default size of chart should be height =1200 and width =1000
-        """),
-Document(text="""
+        """,
+"""
     For a heat map
     Use the 'plotly_white' template for a clean, white background. 
     Set a chart title 
@@ -110,8 +111,8 @@ Document(text="""
     Do not format non-numerical numbers 
 
     . Set the figure dimensions to a height of 1200 pixels and a width of 1000 pixels.
-"""),
-Document(text="""
+""",
+"""
     For a Histogram, used for returns/distribution plotting
     Use the 'plotly_white' template for a clean, white background. 
     Set a chart title 
@@ -123,7 +124,7 @@ Document(text="""
     Use an opacity of 0.75
 
      Set the figure dimensions to a height of 1200 pixels and a width of 1000 pixels.
-""")
+"""
        
          ]
 
