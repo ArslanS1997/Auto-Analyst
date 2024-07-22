@@ -8,6 +8,7 @@ from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import Settings
 from io import StringIO
 import traceback
+import statsmodels.api as sm
 import contextlib
 import sys
 import plotly as px
