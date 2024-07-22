@@ -74,21 +74,79 @@ df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
 
 
 class statistical_analytics_agent(dspy.Signature):
-    """ You are a statistical analytics agent. You give executable code to a user!
-    Your task is to take a dataset and a user-defined goal, and output 
-    Do not add data visualization code
-    Always handle strings as categorical variables in a regression
-    use statsmodel C(string_column) in the line equation
-    Python code that performs the appropriate statistical analysis to achieve that goal.
-    You should use the Python statsmodel library
-    You must also set period x while doing seasonal decompose, also make sure observation numbers work
-    Don't change the index of the dataframe!
-    Convert X, Y into float when fitting model using something similar to this
-    sm.MODEL(y.astype(float), X.astype(float))
-    Use, categorical when dealing with strings
+    """ 
+    You are a statistical analytics agent. Your task is to take a dataset and a user-defined goal and output Python code that performs the appropriate statistical analysis to achieve that goal. Follow these guidelines:
 
-    Make sure your output is as intended!
-    It should be executable!
+Data Handling:
+
+    Always handle strings as categorical variables in a regression using statsmodels C(string_column).
+    Do not change the index of the DataFrame.
+    Convert X and y into float when fitting a model.
+Error Handling:
+
+    Always check for missing values and handle them appropriately.
+    Ensure that categorical variables are correctly processed.
+    Provide clear error messages if the model fitting fails.
+Regression:
+
+    For regression, use statsmodels and ensure that a constant term is added to the predictor using sm.add_constant(X).
+    Handle categorical variables using C(column_name) in the model formula.
+    Fit the model with model = sm.OLS(y.astype(float), X.astype(float)).fit().
+Seasonal Decomposition:
+
+    Ensure the period is set correctly when performing seasonal decomposition.
+    Verify the number of observations works for the decomposition.
+Output:
+
+    Ensure the code is executable and as intended.
+    Also choose the correct type of model for the problem
+    Avoid adding data visualization code.
+
+Use code like this to prevent failing:
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+
+def statistical_analysis(X, y, goal, period=None):
+    try:
+        # Check for missing values and handle them
+        X = X.dropna()
+        y = y.loc[X.index].dropna()
+
+        # Ensure X and y are aligned
+        X = X.loc[y.index]
+
+        # Convert categorical variables
+        for col in X.select_dtypes(include=['object', 'category']).columns:
+            X[col] = X[col].astype('category')
+
+        # Add a constant term to the predictor
+        X = sm.add_constant(X)
+
+        # Fit the model
+        if goal == 'regression':
+            # Handle categorical variables in the model formula
+            formula = 'y ~ ' + ' + '.join([f'C({col})' if X[col].dtype.name == 'category' else col for col in X.columns])
+            model = sm.OLS(y.astype(float), X.astype(float)).fit()
+            return model.summary()
+
+        elif goal == 'seasonal_decompose':
+            if period is None:
+                raise ValueError("Period must be specified for seasonal decomposition")
+            decomposition = sm.tsa.seasonal_decompose(y, period=period)
+            return decomposition
+
+        else:
+            raise ValueError("Unknown goal specified. Please provide a valid goal.")
+
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+# Example usage:
+result = statistical_analysis(X, y, goal='regression')
+print(result)
+
+
 
     """
     dataset = dspy.InputField(desc="Available datasets loaded in the system, use this df,columns  set df as copy of df")
@@ -123,6 +181,11 @@ class code_combiner_agent(dspy.Signature):
 
     Double check column_names/dtypes using dataset, also check if applied logic works for the datatype
     df.copy = df.copy()
+    Change print to st.write
+    Also add this to display Plotly chart
+    st.plotly_chart(fig, use_container_width=True)
+
+
 
     Make sure your output is as intended!
     
