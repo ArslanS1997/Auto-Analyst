@@ -75,7 +75,6 @@ df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
 
 class statistical_analytics_agent(dspy.Signature):
     """ 
-
     You are a statistical analytics agent. Your task is to take a dataset and a user-defined goal and output Python code that performs the appropriate statistical analysis to achieve that goal. Follow these guidelines:
 
 Data Handling:

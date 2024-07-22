@@ -11,6 +11,30 @@ import traceback
 import contextlib
 import sys
 import plotly as px
+def reset_everything():
+    st.cache_data.clear()
+    for key in st.session_state.keys():
+        if isinstance(st.session_state[key],str):
+            st.session_state[key] =''
+        elif isinstance(st.session_state[key],list):
+            st.session_state[key] =[]
+        elif isinstance(st.session_state[key],dict):
+            st.session_state[key] = {}
+        elif isinstance(st.session_state[key],int):
+            st.session_state[key] = 0
+
+
+        # elif isinstance(st.session_state[key],pd.DataFrame()):
+        #     st.session_state[key] = pd.DataFrame()
+
+        # df = pd.DataFrame()
+
+        
+
+
+
+
+
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -66,9 +90,9 @@ st.title("Auto-Analyst")
     # 
 st.logo('Auto-analysts icon small.png')
 st.sidebar.title(":white[Auto-Analyst] ")
-st.sidebar.text("Have all your Data Science ")
+st.sidebar.text("Have all your Data Sciences ")
 st.sidebar.text("Analysis Done!")
-uploaded_file = st.file_uploader("Upload your file here...")
+uploaded_file = st.file_uploader("Upload your file here...", on_change=reset_everything())
 retrievers = {}
 # df = pd.read_csv('open_deals_min2.csv')
 @st.cache_data
@@ -197,14 +221,16 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thumbs" not in st.session_state:
     st.session_state.thumbs = ''
+if "df" not in st.session_state:
+    st.session_state.df = None
 
 
 
-if uploaded_file:
+if uploaded_file :
 
-    df = initialize_data()
-    st.session_state['df'] = df
-    st.write(df.head())
+    st.session_state['df'] = initialize_data()
+    df = st.session_state['df'] 
+    st.write(st.session_state['df'].head())
     desc = st.text_input("Write a description for the uploaded dataset")
     doc=['']
     if st.button("Upload Data"):
@@ -215,7 +241,7 @@ if uploaded_file:
         # st.write(styling_instructions)
         retrievers = initiatlize_retrievers(styling_instructions,doc)
         
-        st.write('Document Uploaded Successfully!')
+        st.success('Document Uploaded Successfully!')
         st.session_state['agent_system_chat'] = intialize_agent()
         st.write("Begin")
 
