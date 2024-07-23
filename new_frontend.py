@@ -25,10 +25,6 @@ def reset_everything():
     #         st.session_state[key] = 0
 
 
-        # elif isinstance(st.session_state[key],pd.DataFrame()):
-        #     st.session_state[key] = pd.DataFrame()
-
-        # df = pd.DataFrame()
 
         
 
@@ -229,7 +225,7 @@ if uploaded_file :
     if st.button("Upload Data"):
         dict_ = make_data(df,desc)
         doc = [str(dict_)]
-        st.write(str(dict_))
+        # st.write(str(dict_))
 
     if doc[0]!='':
         # st.write(styling_instructions)
