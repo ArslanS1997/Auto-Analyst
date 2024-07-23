@@ -137,7 +137,7 @@ def run_chat():
    
     
 
-    # st.sidebar.text(" RevTech tools!")
+
     
 
 
@@ -206,18 +206,10 @@ def run_chat():
 
         
 
-        # bot_response = response
 
-        # Append bot response to messages
-        # st.session_state.messages.append(f"Bot: {bot_response}")
-
-        # Clear input box
         
 
-    # Display messages
-    # for message in st.session_state.messages:
-    #     st.markdown(message)
-# intialize_duckDb()
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thumbs" not in st.session_state:
@@ -237,6 +229,7 @@ if uploaded_file :
     if st.button("Upload Data"):
         dict_ = make_data(df,desc)
         doc = [str(dict_)]
+        st.write(str(dict_))
 
     if doc[0]!='':
         # st.write(styling_instructions)
