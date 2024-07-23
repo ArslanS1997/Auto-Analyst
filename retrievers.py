@@ -7,9 +7,9 @@ import streamlit as st
 
 
 def return_vals(df,c):
-    if isinstance(df[c].iloc[0], (int, float, complex)):
+    if isinstance(df[c].iloc[10], (int, float, complex)):
         return {'max_value':max(df[c]),'min_value': min(df[c]), 'mean_value':np.mean(df[c])}
-    elif(isinstance(df[c].iloc[0],datetime.datetime)):
+    elif(isinstance(df[c].iloc[10],datetime.datetime)):
         return {str(max(df[c])), str(min(df[c])), str(np.mean(df[c]))}
     else:
         return {'top_10_values':df[c].value_counts()[:10], 'total_categoy_count':len(df[c].unique())}
@@ -40,7 +40,11 @@ def make_data(df, desc):
         df[c] = correct_num(df,c)
         
         # type = type(df[c])
-        dict_[c] = {'column_name':c,'type':str(type(df[c].iloc[0])), 'column_information':return_vals(df,c)}
+        try:
+            dict_[c] = {'column_name':c,'type':str(type(df[c].iloc[0])), 'column_information':return_vals(df,c)}
+        except:
+            dict_[c] = {'column_name':c,'type':str(type(df[c].iloc[0])), 'column_information':'NA'}
+
     
     
     return dict_
