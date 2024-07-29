@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import dspy
 import streamlit as st
 
@@ -564,5 +563,4 @@ class auto_analyst(dspy.Module):
         my_bar.progress(100, text=" Compiling the story")
         
         return output_dict
->>>>>>> 5cb13da (first commit)
         
