@@ -8,25 +8,11 @@ from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import Settings
 from io import StringIO
 import traceback
-import statsmodels.api as sm
 import contextlib
 import sys
 import plotly as px
 def reset_everything():
     st.cache_data.clear()
-    # for key in st.session_state.keys():
-    #     if isinstance(st.session_state[key],str):
-    #         st.session_state[key] =''
-    #     elif isinstance(st.session_state[key],list):
-    #         st.session_state[key] =[]
-    #     elif isinstance(st.session_state[key],dict):
-    #         st.session_state[key] = {}
-    #     elif isinstance(st.session_state[key],int):
-    #         st.session_state[key] = 0
-
-
-
-        
 
 
 
@@ -58,17 +44,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# custom_css = """
-# <style>
-#     /* Change sidebar title color */
-#     .css-1d391kg .css-1hynsz9 {  /* Streamlit sidebar title class */
-#         color: #ffffff;  /* Your desired color */
-#     }
-# </style>
-# """
 
-# # Inject the custom CSS into the app
-# st.markdown(custom_css, unsafe_allow_html=True)
 # Load the pre-trained conversational model
 agent_names= [data_viz_agent,sk_learn_agent,statistical_analytics_agent,preprocessing_agent]
 dspy.configure(lm = dspy.OpenAI(model='gpt-4o-mini',api_key=os.environ['OPENAI_API_KEY'], max_tokens=4096))
@@ -90,6 +66,24 @@ st.sidebar.title(":white[Auto-Analyst] ")
 st.sidebar.text("Have all your Data Science ")
 st.sidebar.text("Analysis Done!")
 uploaded_file = st.file_uploader("Upload your file here...", on_change=reset_everything())
+
+st.markdown(
+    """
+    <style>
+    .css-1l1u5u8 code {
+        color: black; /* Change this to your desired color */
+        background-color: #f5f5f5; /* Optional: change background color if needed */
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(instructions)
+
+
 retrievers = {}
 # df = pd.read_csv('open_deals_min2.csv')
 @st.cache_data
@@ -101,12 +95,14 @@ def initialize_data():
 
 
 
-@st.cache_resource 
+@st.cache_resource
 def intialize_agent():
 
     return auto_analyst(agents=agent_names,retrievers=retrievers)
 
-
+@st.cache_resource
+def initial_agent_ind():
+    return auto_analyst_ind(agents=agent_names,retrievers=retrievers)
 
 # def initiatlize_retrievers():
 @st.cache_data(hash_funcs={StringIO: StringIO.getvalue})
@@ -131,15 +127,10 @@ def save():
 # Streamlit app
 def run_chat():
    
-    
-
-
-    
-
 
 
     # User input
-    user_input = st.chat_input("Welcome to Auto-Analyst, How can I help you? Ask me about deals")
+    user_input = st.chat_input("Welcome to Auto-Analyst, How can I help you? You can use @agent_name call a specific agent or let the planner route the query!")
     # button = st.button("Submit Query")
 
     # Generate and display response
@@ -148,46 +139,83 @@ def run_chat():
 
         st.session_state.messages.append('\n------------------------------------------------NEW QUERY------------------------------------------------\n')
         st.session_state.messages.append(f"User: {user_input}")
+        specified_agents = []
+        for a in agent_names: 
+            if a.__pydantic_core_schema__['schema']['model_name'] in user_input.lower():
+                specified_agents.append(a.__pydantic_core_schema__['schema']['model_name'])
+                # break
+        if specified_agents==[]:
 
-        # Generate response
-        # conversation = Conversation(user_input)
-        with st.chat_message("Auto-Anlyst Bot",avatar="🚀"):
-            st.write("Responding to "+ user_input)
-            output=st.session_state['agent_system_chat'](query=user_input)
-            # fig = px.line(x=[1,1,1,1], y=[1,1,1,1])
-            execution = output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('#','####').replace('python','')
-            st.markdown(output['code_combiner_agent'].refined_complete_code)
-            
-            try:
+
+
+            # Generate response
+            # conversation = Conversation(user_input)
+            with st.chat_message("Auto-Anlyst Bot",avatar="🚀"):
+                st.write("Responding to "+ user_input)
+                output=st.session_state['agent_system_chat'](query=user_input)
+                # fig = px.line(x=[1,1,1,1], y=[1,1,1,1])
+                execution = output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('#','####').replace('python','')
+                st.markdown(output['code_combiner_agent'].refined_complete_code)
                 
-                with stdoutIO() as s:
-                    exec(execution)
-                    # if len(output['code_combiner_agent'].refined_complete_code.split('```'))>1:
-                    #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('python','').replace('Python','').replace('```',''))
-                    # elif len(output['code_combiner_agent'].refined_complete_code.split('```'))==0:
-                    #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[0].replace('python','').replace('Python','').replace('```',''))
+                try:
+                    
+                    with stdoutIO() as s:
+                        exec(execution)
+                        # if len(output['code_combiner_agent'].refined_complete_code.split('```'))>1:
+                        #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('python','').replace('Python','').replace('```',''))
+                        # elif len(output['code_combiner_agent'].refined_complete_code.split('```'))==0:
+                        #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[0].replace('python','').replace('Python','').replace('```',''))
 
-                st.markdown(s.getvalue().replace('#','########'))
-                # if 'fig' in output['code_combiner_agent'].refined_complete_code:
-                #     st.plotly_chart(fig)
-                
+                    st.markdown(s.getvalue().replace('#','########'))
+                    # if 'fig' in output['code_combiner_agent'].refined_complete_code:
+                    #     st.plotly_chart(fig)
+                    
 
-            except:
-                # st.session_state['load'] =0
+                except:
+                    # st.session_state['load'] =0
 
-                e = traceback.format_exc()
-                st.markdown("The code is giving an error on excution "+str(e)[:1500])
-                st.write("Please help the code fix agent with human understanding")
-                user_given_context = st.text_input("Help give additional context to guide the agent to fix the code", key='user_given_context')
-                st.session_state.messages.append(user_given_context)
+                    e = traceback.format_exc()
+                    st.markdown("The code is giving an error on excution "+str(e)[:1500])
+                    st.write("Please help the code fix agent with human understanding")
+                    user_given_context = st.text_input("Help give additional context to guide the agent to fix the code", key='user_given_context')
+                    st.session_state.messages.append(user_given_context)
+        else:
+            for spec_agent in specified_agents:
+                with st.chat_message(spec_agent+" Bot",avatar="🚀"):
+                    st.write("Responding to "+ user_input)
+                    output=st.session_state['agent_system_chat_ind'](query=user_input, specified_agent=spec_agent)
+                    # fig = px.line(x=[1,1,1,1], y=[1,1,1,1])
+                    execution = output[specified_agent].code.split('```')[1].replace('#','####').replace('python','')
+                    st.markdown(output[specified_agent].code)
+                    
+                    try:
+                        
+                        with stdoutIO() as s:
+                            exec(execution)
+                            # if len(output['code_combiner_agent'].refined_complete_code.split('```'))>1:
+                            #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('python','').replace('Python','').replace('```',''))
+                            # elif len(output['code_combiner_agent'].refined_complete_code.split('```'))==0:
+                            #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[0].replace('python','').replace('Python','').replace('```',''))
+
+                        st.markdown(s.getvalue().replace('#','########'))
+                        # if 'fig' in output['code_combiner_agent'].refined_complete_code:
+                        #     st.plotly_chart(fig)
+                        
+
+                    except:
+                        # st.session_state['load'] =0
+
+                        e = traceback.format_exc()
+                        st.markdown("The code is giving an error on excution "+str(e)[:1500])
+                        st.write("Please help the code fix agent with human understanding")
+                        user_given_context = st.text_input("Help give additional context to guide the agent to fix the code", key='user_given_context')
+                        st.session_state.messages.append(user_given_context)
+
 
 
         with st.form('form'):
             streamlit_feedback(feedback_type="thumbs", optional_text_label="Do you like the response?", align="flex-start")
-                # st.session_state.messages.append(str(st.session_state['thumbs']))
-            # if feedback:
-            #     st.write("Saving feedback")
-            #     st.messages.append("This is user feedback"+str(feedback))
+
             st.session_state.messages.append('\n---------------------------------------------------------------------------------------------------------\n')
 
 
@@ -202,10 +230,18 @@ def run_chat():
 
         
 
+        # bot_response = response
 
+        # Append bot response to messages
+        # st.session_state.messages.append(f"Bot: {bot_response}")
+
+        # Clear input box
         
 
-
+    # Display messages
+    # for message in st.session_state.messages:
+    #     st.markdown(message)
+# intialize_duckDb()
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thumbs" not in st.session_state:
@@ -223,9 +259,9 @@ if uploaded_file :
     desc = st.text_input("Write a description for the uploaded dataset")
     doc=['']
     if st.button("Upload Data"):
+
         dict_ = make_data(df,desc)
         doc = [str(dict_)]
-        # st.write(str(dict_))
 
     if doc[0]!='':
         # st.write(styling_instructions)
@@ -233,6 +269,7 @@ if uploaded_file :
         
         st.success('Document Uploaded Successfully!')
         st.session_state['agent_system_chat'] = intialize_agent()
+        st.session_state['agent_system_chat_ind'] = initial_agent_ind()
         st.write("Begin")
 
 
@@ -255,5 +292,4 @@ run_chat()
 
 
 # st.write(st.session_state)
-
 
