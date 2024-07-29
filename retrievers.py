@@ -5,6 +5,31 @@ import numpy as np
 import datetime
 import streamlit as st
 
+instructions ="""
+Here are the instructions for the AI system with the specified agents:
+
+### AI System Instructions
+
+#### Agents
+- `@data_viz_agent`: Handles queries related to data visualization.
+- `@sk_learn_agent`: Handles queries related to machine learning using scikit-learn.
+- `@statistical_analytics_agent`: Handles queries related to statistical analysis.
+- `@preprocessing_agent`: Handles queries related to data preprocessing.
+
+#### Query Routing
+
+1. **Direct Agent Routing**:
+    - If the user specifies an agent in their query using `@agent_name`, the query will be directly routed to the specified agent.
+    - Example: `@data_viz_agent Create a bar chart from the following data.`
+
+2. **Planner-Based Routing**:
+    - If the user does not specify an agent, the query will be routed to the system's planner.
+    - The planner will analyze the query and determine the most appropriate agent to handle the request.
+    - Example: `Generate a confusion matrix from this dataset.`
+
+PLEASE READ THE INSTRUCTIONS! Thank you
+"""
+
 
 def return_vals(df,c):
     if isinstance(df[c].iloc[10], (int, float, complex)):
