@@ -406,6 +406,6 @@ class auto_analyst(dspy.Module):
         # st.session_state.messages.append(f"story_teller_agent: {output_dict['story_teller_agent']}")
         my_bar.progress(100, text=" Compiling the story")
         output_dict['memory_combined'] = str(self.memory_summarize_agent(agent_response='code_combiner_agent'+'\n'+str(output_dict['code_combiner_agent'].refined_complete_code), user_goal=query).summary)
-        st.session_state.st_memory.insert(0,f"{'memory_'+specified_agent.strip()} : {output_dict['memory_'+specified_agent.strip()]}")
+        st.session_state.st_memory.insert(0,f"{'memory_combined'} : {output_dict['memory_combined']}")
 
         return output_dict
