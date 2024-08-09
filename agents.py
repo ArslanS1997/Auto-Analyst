@@ -70,8 +70,9 @@ You may be give recent agent interactions as a hint!
     """
     dataset = dspy.InputField(desc="Available datasets loaded in the system, use this df, column_names  set df as copy of df")
     goal = dspy.InputField(desc="The user defined goal could ")
-    commentary = dspy.OutputField(desc="The comments about what analysis is being performed")
     code = dspy.OutputField(desc ="The code that does the data preprocessing and introductory analysis")
+    commentary = dspy.OutputField(desc="The comments about what analysis is being performed")
+    
 
 
 class statistical_analytics_agent(dspy.Signature):

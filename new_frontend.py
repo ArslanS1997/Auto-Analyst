@@ -140,7 +140,7 @@ def save():
 def run_chat():
     if 'df' in st.session_state:
         df = st.session_state['df']
-        # st.write(df)
+        st.write(df.head(5))
    
 
 
@@ -325,4 +325,6 @@ if st.session_state['thumbs']!='':
 run_chat()
 # st.write(df)
 
+if len(st.session_state.st_memory)>10:
+    st.session_state.st_memory = st.session_state.st_memory[:10]
 
