@@ -138,7 +138,7 @@ def save():
 
 # Streamlit app
 def run_chat():
-    if st.session_state['df']!=None
+    if st.session_state['df']!=None:
         df = st.session_state['df']
         st.write(df.head(5))
    
