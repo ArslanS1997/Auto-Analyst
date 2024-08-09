@@ -53,8 +53,8 @@ def make_data(df, desc):
     dict_ = {}
     dict_['df_name'] = "The data is loaded as df"
     dict_['Description'] = desc
-    dict_['dataframe_head_view'] = df.head(10).to_markdown()
-    # dict_['all_column_names'] = str(list(df.columns))
+    dict_['dataframe_head_view'] = df.head(5).to_markdown()
+    dict_['all_column_names'] = str(list(df.columns))
     # dict_['columns_null_count'] = str(dict(df.isnull().sum().sort_values(ascending=False)[:10])).strip()
 
 

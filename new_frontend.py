@@ -2,6 +2,7 @@ from agents import *
 import streamlit as st
 from retrievers import *
 import os
+import statsmodels.api as sm
 from streamlit_feedback import streamlit_feedback
 from llama_index.core import Document
 from llama_index.embeddings.openai import OpenAIEmbedding
@@ -45,9 +46,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# Load the pre-trained conversational model
+# Load the agents into the system
 agent_names= [data_viz_agent,sk_learn_agent,statistical_analytics_agent,preprocessing_agent]
-dspy.configure(lm = dspy.OpenAI(model='gpt-4o-mini',api_key=os.environ['OPENAI_API_KEY'], max_tokens=4096))
+# Configure the LLM to be ChatGPT-4o-mini
+dspy.configure(lm = dspy.OpenAI(model='gpt-4o-mini',api_key=os.environ['OPENAI_API_KEY'], max_tokens=16384))
 
 # dspy.configure(lm =dspy.GROQ(model='llama3-70b-8192', api_key =os.environ.get("GROQ_API_KEY"),max_tokens=10000 ) )
 
@@ -66,6 +68,13 @@ st.sidebar.title(":white[Auto-Analyst] ")
 st.sidebar.text("Have all your Data Science ")
 st.sidebar.text("Analysis Done!")
 uploaded_file = st.file_uploader("Upload your file here...", on_change=reset_everything())
+st.write("You can upload your own data or use sample data by clicking the button below")
+sample_data = st.button("Use Sample Data")
+if sample_data:
+    # temp_df = pd.read_csv("Housing.csv")
+    # del uploaded_file
+    uploaded_file = "Housing.csv"
+
 
 st.markdown(
     """
@@ -87,10 +96,12 @@ st.markdown(instructions)
 retrievers = {}
 # df = pd.read_csv('open_deals_min2.csv')
 @st.cache_data
-def initialize_data():
-    # if uploaded_file:
-    # doc =['']
-    uploaded_df = pd.read_csv(uploaded_file, parse_dates=True)
+def initialize_data(button_pressed=False):
+    if button_pressed==False:
+        uploaded_df = pd.read_csv(uploaded_file, parse_dates=True)
+    else:
+        uploaded_df = pd.read_csv("Housing.csv")
+        st.write("LOADED")
     return uploaded_df
 
 
@@ -111,6 +122,7 @@ def initiatlize_retrievers(_styling_instructions, _doc):
     style_index =  VectorStoreIndex.from_documents([Document(text=x) for x in _styling_instructions])
     retrievers['style_index'] = style_index
     retrievers['dataframe_index'] =  VectorStoreIndex.from_documents([Document(text=x) for x in _doc])
+    # retrievers['st_memory_index'] = VectorStoreIndex.from_documents([Document(text="Initializing memory")])
 
     return retrievers
     
@@ -126,6 +138,9 @@ def save():
 
 # Streamlit app
 def run_chat():
+    if 'df' in st.session_state:
+        df = st.session_state['df']
+        # st.write(df)
    
 
 
@@ -134,15 +149,26 @@ def run_chat():
     # button = st.button("Submit Query")
 
     # Generate and display response
-    if user_input and uploaded_file:
-        # Append user input to messages
+    # st.write(uploaded_file)
+    if user_input:
+        if st.session_state.messages!=[]:
+         
+            for m in st.session_state.messages:
+                if '-------------------------' not in m:
+                    st.write(m.replace('#','######'))
+
+
+
+
+
 
         st.session_state.messages.append('\n------------------------------------------------NEW QUERY------------------------------------------------\n')
         st.session_state.messages.append(f"User: {user_input}")
+        
         specified_agents = []
         for a in agent_names: 
             if a.__pydantic_core_schema__['schema']['model_name'] in user_input.lower():
-                specified_agents.append(a.__pydantic_core_schema__['schema']['model_name'])
+                specified_agents.insert(0,a.__pydantic_core_schema__['schema']['model_name'])
                 # break
         if specified_agents==[]:
 
@@ -153,6 +179,7 @@ def run_chat():
             with st.chat_message("Auto-Anlyst Bot",avatar="🚀"):
                 st.write("Responding to "+ user_input)
                 output=st.session_state['agent_system_chat'](query=user_input)
+                # st.session_state.previous_replies.append(output)
                 # fig = px.line(x=[1,1,1,1], y=[1,1,1,1])
                 execution = output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('#','####').replace('python','')
                 st.markdown(output['code_combiner_agent'].refined_complete_code)
@@ -161,14 +188,9 @@ def run_chat():
                     
                     with stdoutIO() as s:
                         exec(execution)
-                        # if len(output['code_combiner_agent'].refined_complete_code.split('```'))>1:
-                        #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('python','').replace('Python','').replace('```',''))
-                        # elif len(output['code_combiner_agent'].refined_complete_code.split('```'))==0:
-                        #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[0].replace('python','').replace('Python','').replace('```',''))
+                       
+                    st.write(s.getvalue().replace('#','########'))
 
-                    st.markdown(s.getvalue().replace('#','########'))
-                    # if 'fig' in output['code_combiner_agent'].refined_complete_code:
-                    #     st.plotly_chart(fig)
                     
 
                 except:
@@ -182,24 +204,28 @@ def run_chat():
         else:
             for spec_agent in specified_agents:
                 with st.chat_message(spec_agent+" Bot",avatar="🚀"):
-                    st.write("Responding to "+ user_input)
+                    st.markdown("Responding to "+ user_input)
                     output=st.session_state['agent_system_chat_ind'](query=user_input, specified_agent=spec_agent)
+                    # st.session_state.previous_replies.append(output)
                     # fig = px.line(x=[1,1,1,1], y=[1,1,1,1])
-                    execution = output[specified_agent].code.split('```')[1].replace('#','####').replace('python','')
-                    st.markdown(output[specified_agent].code)
+                    if len(output[spec_agent].code.split('```'))>1:
+                        execution = output[spec_agent].code.split('```')[1].replace('#','####').replace('python','').replace('fig.show()','st.plotly_chart(fig)')
+                    else:
+                        execution = output[spec_agent].code.split('```')[0].replace('#','####').replace('python','').replace('fig.show()','st.plotly_chart(fig)')
+
+
+                    # st.markdown(execution)
+
                     
                     try:
                         
                         with stdoutIO() as s:
                             exec(execution)
-                            # if len(output['code_combiner_agent'].refined_complete_code.split('```'))>1:
-                            #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[1].replace('python','').replace('Python','').replace('```',''))
-                            # elif len(output['code_combiner_agent'].refined_complete_code.split('```'))==0:
-                            #     exec(output['code_combiner_agent'].refined_complete_code.split('```')[0].replace('python','').replace('Python','').replace('```',''))
+                    
 
-                        st.markdown(s.getvalue().replace('#','########'))
-                        # if 'fig' in output['code_combiner_agent'].refined_complete_code:
-                        #     st.plotly_chart(fig)
+                        st.write(s.getvalue().replace('#','########'))
+
+
                         
 
                     except:
@@ -248,20 +274,24 @@ if "thumbs" not in st.session_state:
     st.session_state.thumbs = ''
 if "df" not in st.session_state:
     st.session_state.df = None
+if "st_memory" not in st.session_state:
+    st.session_state.st_memory = []
 
-
-
-if uploaded_file :
-
+if uploaded_file or sample_data:
+    # st.write(uploaded_file)
     st.session_state['df'] = initialize_data()
-    df = st.session_state['df'] 
+    
     st.write(st.session_state['df'].head())
-    desc = st.text_input("Write a description for the uploaded dataset")
-    doc=['']
-    if st.button("Upload Data"):
+    if sample_data:
+        desc = "Housing Dataset"
+        doc=[str(make_data(st.session_state['df'],desc))]
+    else:
+        desc = st.text_input("Write a description for the uploaded dataset")
+        doc=['']
+        if st.button("Start The Analysis"):
 
-        dict_ = make_data(df,desc)
-        doc = [str(dict_)]
+            dict_ = make_data(st.session_state['df'],desc)
+            doc = [str(dict_)]
 
     if doc[0]!='':
         # st.write(styling_instructions)
@@ -271,6 +301,9 @@ if uploaded_file :
         st.session_state['agent_system_chat'] = intialize_agent()
         st.session_state['agent_system_chat_ind'] = initial_agent_ind()
         st.write("Begin")
+    
+
+
 
 
 if st.session_state['thumbs']!='':
@@ -287,9 +320,9 @@ if st.session_state['thumbs']!='':
 
 
 
+
+
 run_chat()
+# st.write(df)
 
-
-
-# st.write(st.session_state)
 
