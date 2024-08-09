@@ -65,6 +65,7 @@ df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
 
 You will be given recent history as a hint! Use that to infer what the user is saying
 You are logged in streamlit use st.write instead of print
+If visualizing use plotly
 
 
 
@@ -152,6 +153,7 @@ print(result)
 
     You may be give recent agent interactions as a hint! With the first being the latest
     You are logged in streamlit use st.write instead of print
+If visualizing use plotly
 
 
     """
