@@ -138,9 +138,12 @@ def save():
 
 # Streamlit app
 def run_chat():
-    if st.session_state['df']!=None:
+    if 'df' not in st.session_state['df']:
         df = st.session_state['df']
-        st.write(df.head(5))
+        try:
+            st.write(df.head(5))
+        except:
+            print("load df")
    
 
 
