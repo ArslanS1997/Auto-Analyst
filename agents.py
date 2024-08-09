@@ -63,7 +63,8 @@ def safe_to_datetime(date):
 
 df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
 
-You may be give recent agent interactions as a hint!
+You will be given recent history as a hint! Use that to infer what the user is saying
+You are logged in streamlit use st.write instead of print
 
 
 
@@ -150,6 +151,8 @@ print(result)
 
 
     You may be give recent agent interactions as a hint! With the first being the latest
+    You are logged in streamlit use st.write instead of print
+
 
     """
     dataset = dspy.InputField(desc="Available datasets loaded in the system, use this df,columns  set df as copy of df")
@@ -167,6 +170,7 @@ class sk_learn_agent(dspy.Signature):
     Make sure your output is as intended!
 
     You may be give recent agent interactions as a hint! With the first being the latest
+    You are logged in streamlit use st.write instead of print
 
     
     """
@@ -197,6 +201,7 @@ class code_combiner_agent(dspy.Signature):
 
     Make sure your output is as intended!
         You may be give recent agent interactions as a hint! With the first being the latest
+    You are logged in streamlit use st.write instead of print
 
 
     """
@@ -226,6 +231,8 @@ class data_viz_agent(dspy.Signature):
     You may be give recent agent interactions as a hint! With the first being the latest
     DONT INCLUDE GOAL/DATASET/STYLING INDEX IN YOUR OUTPUT!
     You can add trendline into a scatter plot to show it changes,only if user mentions for it in the query!
+    You are logged in streamlit use st.write instead of print
+
     """
     goal = dspy.InputField(desc="user defined goal which includes information about data and chart they want to plot")
     dataset = dspy.InputField(desc=" Provides information about the data in the data frame. Only use column names and dataframe_name as in this context")
@@ -245,6 +252,8 @@ class code_fix(dspy.Signature):
 
     please reflect on the errors of the AI agent and then generate a 
    correct step-by-step solution to the problem.
+   You are logged in streamlit use st.write instead of print
+
 
     """
     faulty_code = dspy.InputField(desc="The faulty code that did not work")
