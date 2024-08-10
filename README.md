@@ -3,9 +3,6 @@
 # Auto-Analyst 
 
 
-## Description
-
-# Auto-Analyst: AI Data Analytics Agentic System
 
 ![auto-analyst logo.png](https://github.com/ArslanS1997/Auto-Analyst/blob/main/auto-analyst%20logo.png)
 
