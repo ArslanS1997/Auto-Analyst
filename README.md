@@ -4,7 +4,7 @@
 
 
 
-![auto-analyst logo.png](https://github.com/ArslanS1997/Auto-Analyst/blob/main/auto-analyst%20logo.png)
+![auto-analyst logo.png](https://github.com/ArslanS1997/Auto-Analyst/blob/main/images/auto-analyst%20logo.png)
 
 
 
