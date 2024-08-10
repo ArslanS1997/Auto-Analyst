@@ -7,7 +7,7 @@
 
 # Auto-Analyst: AI Data Analytics Agentic System
 
-! logo [auto-analyst logo.png]
+! [logo](auto-analyst logo.png)
 
 ## Description
 
