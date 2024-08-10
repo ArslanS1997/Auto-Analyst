@@ -6,12 +6,14 @@
 
 ![auto-analyst logo.png](https://github.com/ArslanS1997/Auto-Analyst/blob/main/auto-analyst%20logo.png)
 
-![UI Banner](https://github.com/ArslanS1997/Auto-Analyst/blob/main/Auto-Analyst%20Banner.png)
+
 
 
 ## Description
 
 **Auto-Analyst** is an AI-driven data analytics agentic system designed to simplify and enhance the data science process. By integrating various specialized AI agents, this tool aims to make complex data analysis tasks more accessible and efficient for data analysts and scientists. Auto-Analyst provides a streamlined approach to data preprocessing, statistical analysis, machine learning, and visualization, all within an interactive Streamlit interface.
+
+![UI Banner](https://github.com/ArslanS1997/Auto-Analyst/blob/main/Auto-Analyst%20Banner.png)
 
 ### Key Features:
 
