@@ -1,10 +1,10 @@
-from llama_index.core import VectorStoreIndex
-# from llama_index.core.readers.json import JSONReader
+# This file handles the data-preprocessing and creates retrievers
+
 import pandas as pd
 import numpy as np
 import datetime
-import streamlit as st
 
+# instructions also stored here
 instructions ="""
 Here are the instructions for the AI system with the specified agents:
 
@@ -30,7 +30,7 @@ Here are the instructions for the AI system with the specified agents:
 PLEASE READ THE INSTRUCTIONS! Thank you
 """
 
-
+# For every column collects some useful information like top10 categories and min,max etc if applicable
 def return_vals(df,c):
     if isinstance(df[c].iloc[10], (int, float, complex)):
         return {'max_value':max(df[c]),'min_value': min(df[c]), 'mean_value':np.mean(df[c])}
@@ -39,6 +39,7 @@ def return_vals(df,c):
     else:
         return {'top_10_values':df[c].value_counts()[:10], 'total_categoy_count':len(df[c].unique())}
     
+#removes `,` from numeric columns
 def correct_num(df,c):
     try:
         df[c] = df[c].fillna('0').str.replace(',','').astype(float)
@@ -48,23 +49,20 @@ def correct_num(df,c):
 
 
 
-
+# does most of the pre-processing
 def make_data(df, desc):
     dict_ = {}
     dict_['df_name'] = "The data is loaded as df"
     dict_['Description'] = desc
     dict_['dataframe_head_view'] = df.head(5).to_markdown()
     dict_['all_column_names'] = str(list(df.columns))
-    # dict_['columns_null_count'] = str(dict(df.isnull().sum().sort_values(ascending=False)[:10])).strip()
-
 
         
     for c in df.columns:
-        # if df[c].isnull().all():
-        #     df[c] = 'Null'
+
         df[c] = correct_num(df,c)
         
-        # type = type(df[c])
+
         try:
             dict_[c] = {'column_name':c,'type':str(type(df[c].iloc[0])), 'column_information':return_vals(df,c)}
         except:
@@ -76,7 +74,7 @@ def make_data(df, desc):
 
 
 
-
+# These are stored styling instructions for data_viz_agent, helps generate good graphs
 styling_instructions =[
     """
         Dont ignore any of these instructions.
@@ -157,13 +155,6 @@ styling_instructions =[
        
          ]
 
-# Settings.embed_model = OpenAIEmbedding(api_key=st.secrets("OPENAI_API_KEY"))
 
-# retrievers = {}
-
-# style_index =  VectorStoreIndex.from_documents(styling_instructions)
-# # documents = reader.load_data(input_file='dataframe.json')
-# retrievers['style_index'] = style_index
-# retrievers['dataframe_index'] = VectorStoreIndex.from_documents(documents)
 
 
