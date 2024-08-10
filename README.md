@@ -6,6 +6,7 @@
 
 ![auto-analyst logo.png](https://github.com/ArslanS1997/Auto-Analyst/blob/main/auto-analyst%20logo.png)
 
+![UI Banner](https://github.com/ArslanS1997/Auto-Analyst/blob/main/Auto-Analyst%20Banner.png)
 
 
 ## Description
