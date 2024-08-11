@@ -9,6 +9,7 @@ import statsmodels.api as sm
 from streamlit_feedback import streamlit_feedback
 from llama_index.core import Document
 from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
 from io import StringIO
 import traceback
@@ -63,12 +64,12 @@ dspy.configure(lm = dspy.OpenAI(model='gpt-4o-mini',api_key=os.environ['OPENAI_A
 Settings.embed_model = OpenAIEmbedding(api_key=os.environ["OPENAI_API_KEY"])
 
 # Imports images
-st.image('Auto-analysts icon small.png', width=70)
+st.image('./images/Auto-analysts icon small.png', width=70)
 st.title("Auto-Analyst")
     
 
 # asthetic features for streamlit app
-st.logo('Auto-analysts icon small.png')
+st.logo('./images/Auto-analysts icon small.png')
 st.sidebar.title(":white[Auto-Analyst] ")
 st.sidebar.text("Have all your Data Science ")
 st.sidebar.text("Analysis Done!")
@@ -149,12 +150,27 @@ def run_chat():
     # defines a variable df (agent code often refers to the dataframe as that)
     if 'df' in st.session_state:
         df = st.session_state['df']
-        st.write(df.head(5))
+        if df is not None:
+            st.write(df.head(5))
+            if "show_placeholder" not in st.session_state:
+                st.session_state.show_placeholder = True
+        else:
+            st.error("No data uploaded yet, please upload a file or use sample data")
    
+    # Placeholder text to display above the chat box
+    placeholder_text = "Welcome to Auto-Analyst, How can I help you? You can use @agent_name to call a specific agent or let the planner route the query!"
 
+    # Display the placeholder text above the chat box
+    if "show_placeholder" in st.session_state and st.session_state.show_placeholder:
+        st.markdown(f"**{placeholder_text}**")
 
-    # User input taken here
-    user_input = st.chat_input("Welcome to Auto-Analyst, How can I help you? You can use @agent_name call a specific agent or let the planner route the query!")
+    # User input taken here    
+    user_input = st.chat_input("What are the summary statistics of the data?")
+
+    # Once the user enters a query, hide the placeholder text
+    if user_input:
+        st.session_state.show_placeholder = False
+
 
     # If user has given input or query
     if user_input:
