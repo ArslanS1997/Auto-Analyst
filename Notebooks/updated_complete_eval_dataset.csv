@@ -1,0 +1,2381 @@
+type,query,Generated code,Generated commentary,dataset_csv,executed,user_verified,Expected response
+Linear Regression,Perform a linear regression to predict house prices based on area and the number of bedrooms.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Define predictor variables (X) and response variable (y)
+X = df[['area', 'bedrooms']]
+y = df['price']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor variables
+X = sm.add_constant(X)
+
+# Fit the linear regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Print the summary of the regression model
+print(model.summary())
+```","The code performs a linear regression analysis to predict house prices based on the area and the number of bedrooms. It first checks for missing values and drops any rows with missing data. The predictor variables are defined as 'area' and 'bedrooms', while 'price' is the response variable. The predictor variables are converted to float, and a constant term is added to account for the intercept in the regression model. The model is then fitted using statsmodels' OLS function, and any errors during the fitting process are caught and reported. Finally, the summary of the regression model is printed, which includes coefficients, R-squared values, and other statistical metrics.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Define predictor variables (X) and response variable (y)
+X = df[['area', 'bedrooms']]
+y = df['price']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor variables
+X = sm.add_constant(X)
+
+# Fit the linear regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Print the summary of the regression model
+print(model.summary())
+```"
+Logistic Regression,Build a logistic regression model to predict whether a house has air conditioning based on the number of stories and whether it has a guest room.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with any missing values."")
+    df = df.dropna()
+
+# Convert 'airconditioning' to a binary variable
+df['airconditioning'] = df['airconditioning'].map({'yes': 1, 'no': 0})
+
+# Select predictor variables
+X = df[['stories', 'guestroom']]
+X['guestroom'] = X['guestroom'].map({'yes': 1, 'no': 0})  # Convert guestroom to binary
+y = df['airconditioning']
+
+# Ensure the data types are float for model fitting
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor variables
+X = sm.add_constant(X)
+
+# Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+    print(result.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","The code begins by creating a copy of the DataFrame to avoid modifying the original data. It checks for missing values and drops any rows with missing data. The target variable 'airconditioning' is converted to a binary format, and the predictor variable 'guestroom' is also converted to binary. The predictor variables are then prepared for the logistic regression model by ensuring they are in float format and adding a constant term. Finally, the logistic regression model is fitted using the statsmodels library, and the summary of the model is printed. If any errors occur during model fitting, a clear error message is provided.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with any missing values."")
+    df = df.dropna()
+
+# Convert 'airconditioning' to a binary variable
+df['airconditioning'] = df['airconditioning'].map({'yes': 1, 'no': 0})
+
+# Select predictor variables
+X = df[['stories', 'guestroom']]
+X['guestroom'] = X['guestroom'].map({'yes': 1, 'no': 0})  # Convert guestroom to binary
+y = df['airconditioning']
+
+# Ensure the data types are float for model fitting
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor variables
+X = sm.add_constant(X)
+
+# Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+    print(result.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```"
+Multiple Regression,"Perform a multiple regression analysis to predict house prices based on area, number of bedrooms, and the number of parking spaces.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined as the DataFrame containing the housing data
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with any missing values."")
+    df = df.dropna()
+
+# Define the feature set (X) and target variable (y)
+X = df[['area', 'bedrooms', 'parking', 'mainroad', 'guestroom', 'basement', 
+         'hotwaterheating', 'airconditioning', 'prefarea', 'furnishingstatus']]
+y = df['price']
+
+# Convert categorical variables to the appropriate format
+X = pd.get_dummies(X, drop_first=True)
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","In this code, we first check for missing values in the dataset and drop any rows that contain them. We then define our feature set (X) and target variable (y), ensuring that categorical variables are converted into dummy variables suitable for regression analysis. A constant term is added to the predictor variables to account for the intercept in the regression model. Finally, we fit the Ordinary Least Squares (OLS) regression model and print the summary of the results. If any errors occur during the model fitting process, we catch the exception and print an error message.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined as the DataFrame containing the housing data
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with any missing values."")
+    df = df.dropna()
+
+# Define the feature set (X) and target variable (y)
+X = df[['area', 'bedrooms', 'parking', 'mainroad', 'guestroom', 'basement', 
+         'hotwaterheating', 'airconditioning', 'prefarea', 'furnishingstatus']]
+y = df['price']
+
+# Convert categorical variables to the appropriate format
+X = pd.get_dummies(X, drop_first=True)
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```"
+ANOVA,Conduct an ANOVA to compare house prices across different numbers of stories.,"```python
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'price' and 'stories'
+if df[['price', 'stories']].isnull().any().any():
+    df = df.dropna(subset=['price', 'stories'])
+
+# Convert 'stories' to a categorical variable
+df['stories'] = df['stories'].astype('category')
+
+# Perform ANOVA
+model = ols('price ~ C(stories)', data=df).fit()
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+```","The code above performs an ANOVA analysis to compare house prices across different numbers of stories. It first checks for and handles any missing values in the 'price' and 'stories' columns. The 'stories' column is then converted to a categorical variable to facilitate the comparison of means. The `ols` function from `statsmodels` is used to fit the model, and the ANOVA table is generated using `anova_lm`. The results will indicate whether there are significant differences in house prices based on the number of stories in the houses.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'price' and 'stories'
+if df[['price', 'stories']].isnull().any().any():
+    df = df.dropna(subset=['price', 'stories'])
+
+# Convert 'stories' to a categorical variable
+df['stories'] = df['stories'].astype('category')
+
+# Perform ANOVA
+model = ols('price ~ C(stories)', data=df).fit()
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+```"
+Time Series Analysis,Perform a time series analysis on house prices to forecast the next month's price.,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.tsa.arima.model import ARIMA
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with NaN."")
+    df = df.dropna()
+
+# Ensure 'price' is treated as a time series
+# Assuming the DataFrame is indexed by time, if not, we need to set a datetime index
+# For this example, we will assume the DataFrame is already sorted by date
+# and has a datetime index. If not, you would need to convert a date column to datetime.
+
+# Fit an ARIMA model
+try:
+    model = ARIMA(df['price'], order=(1, 1, 1))  # Example order, can be optimized
+    model_fit = model.fit()
+    forecast = model_fit.forecast(steps=1)  # Forecasting the next month's price
+    print(f""Forecasted price for next month: {forecast[0]}"")
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","The code begins by creating a copy of the original DataFrame to avoid modifying the original data. It checks for missing values and drops any rows with NaN values to ensure the integrity of the analysis. The 'price' column is then treated as a time series, and an ARIMA model is fitted to the data. The order of the ARIMA model is set to (1, 1, 1) as a starting point, but this can be optimized based on the data characteristics. Finally, the model forecasts the price for the next month, and any errors during the model fitting process are caught and reported.",Housing copy.csv,1.0,True,"import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.tsa.arima.model import ARIMA
+
+# Create a copy of the original DataFrame
+df = pd.read_csv('Housing copy.csv')
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with NaN."")
+    df = df.dropna()
+
+# Ensure 'price' is treated as a time series
+# Assuming the DataFrame is indexed by time, if not, we need to set a datetime index
+# For this example, we will assume the DataFrame is already sorted by date
+# and has a datetime index. If not, you would need to convert a date column to datetime.
+
+# Fit an ARIMA model
+
+try:
+    model = ARIMA(df['price'], order=(1, 1, 1))  # Example order, can be optimized
+    model_fit = model.fit()
+    forecast = model_fit.forecast(steps=1)  # Forecasting the next month's price
+    print(f""Forecasted price for next month: {forecast.values[0]}"")
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+"
+Correlation Analysis,Calculate the correlation between house prices and the area of the house.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'price' and 'area'
+if df[['price', 'area']].isnull().any().any():
+    df = df.dropna(subset=['price', 'area'])
+
+# Define the dependent and independent variables
+X = df[['area']]
+y = df['price']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    correlation = model.rsquared
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the correlation
+correlation
+```","The code begins by creating a copy of the DataFrame to avoid modifying the original data. It checks for missing values in the 'price' and 'area' columns and drops any rows with missing values. The independent variable (area) and dependent variable (price) are then defined, and both are converted to float type for the regression analysis. A constant term is added to the predictor to account for the intercept in the regression model. The Ordinary Least Squares (OLS) regression model is fitted, and the R-squared value, which indicates the proportion of variance in the dependent variable that can be explained by the independent variable, is calculated. If the model fitting fails, a clear error message is provided.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'price' and 'area'
+if df[['price', 'area']].isnull().any().any():
+    df = df.dropna(subset=['price', 'area'])
+
+# Define the dependent and independent variables
+X = df[['area']]
+y = df['price']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    correlation = model.rsquared
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the correlation
+correlation
+```"
+Logistic Regression,Build a logistic regression model to predict whether a house is furnished based on the area and the number of bedrooms.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Define the target variable and predictors
+y = df['furnishingstatus'].apply(lambda x: 1 if x == 'furnished' else 0)  # Convert to binary
+X = df[['area', 'bedrooms']]
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Print the summary of the model
+print(result.summary())
+```","The code begins by creating a copy of the original DataFrame to avoid modifying the original data. It checks for missing values and drops any rows that contain them. The target variable (furnishingstatus) is converted into a binary format, where 'furnished' is represented as 1 and any other status as 0. The predictors (area and bedrooms) are selected and converted to float type. A constant term is added to the predictors to account for the intercept in the logistic regression model. Finally, the logistic regression model is fitted using statsmodels, and the summary of the model is printed to provide insights into the relationship between the predictors and the target variable.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Define the target variable and predictors
+y = df['furnishingstatus'].apply(lambda x: 1 if x == 'furnished' else 0)  # Convert to binary
+X = df[['area', 'bedrooms']]
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Print the summary of the model
+print(result.summary())
+```"
+Chi-Square Test,Perform a chi-square test to determine if there's an association between having a basement and the presence of air conditioning.,"```python
+import pandas as pd
+import numpy as np
+from scipy.stats import chi2_contingency
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'basement' and 'airconditioning'
+missing_values = df[['basement', 'airconditioning']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Drop rows with missing values
+    df = df.dropna(subset=['basement', 'airconditioning'])
+
+# Create a contingency table
+contingency_table = pd.crosstab(df['basement'], df['airconditioning'])
+
+# Perform the chi-square test
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+# Output the results
+print(f""Chi-square statistic: {chi2}"")
+print(f""P-value: {p}"")
+print(f""Degrees of freedom: {dof}"")
+print(""Expected frequencies:"")
+print(expected)
+```","The code begins by creating a copy of the DataFrame to avoid modifying the original data. It checks for missing values in the 'basement' and 'airconditioning' columns and drops any rows with missing data. A contingency table is then created to summarize the counts of observations for each combination of the two categorical variables. The chi-square test is performed using the `chi2_contingency` function from the `scipy.stats` module, which returns the chi-square statistic, p-value, degrees of freedom, and expected frequencies. Finally, the results are printed for interpretation.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import numpy as np
+from scipy.stats import chi2_contingency
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'basement' and 'airconditioning'
+missing_values = df[['basement', 'airconditioning']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Drop rows with missing values
+    df = df.dropna(subset=['basement', 'airconditioning'])
+
+# Create a contingency table
+contingency_table = pd.crosstab(df['basement'], df['airconditioning'])
+
+# Perform the chi-square test
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+# Output the results
+print(f""Chi-square statistic: {chi2}"")
+print(f""P-value: {p}"")
+print(f""Degrees of freedom: {dof}"")
+print(""Expected frequencies:"")
+print(expected)
+```"
+Polynomial Regression,"Perform a polynomial regression to predict house prices using the area, allowing for a quadratic relationship.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Create a new feature for the square of the area
+df['area_squared'] = df['area'] ** 2
+
+# Define independent variables (X) and dependent variable (y)
+X = df[['area', 'area_squared']]
+y = df['price']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the polynomial regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+print(model.summary())
+```","The code performs a polynomial regression analysis to predict house prices based on the area. It first checks for missing values and drops any rows with missing data. A new feature, `area_squared`, is created to capture the quadratic relationship. The independent variables are defined as both the area and its square, while the dependent variable is the price. The model is fitted using statsmodels' OLS function, and a summary of the model is printed to evaluate the results.",Housing copy.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Create a new feature for the square of the area
+df['area_squared'] = df['area'] ** 2
+
+# Define independent variables (X) and dependent variable (y)
+X = df[['area', 'area_squared']]
+y = df['price']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the polynomial regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+print(model.summary())
+```"
+Linear Regression,Build a linear regression model to predict the 'All items' index based on the 'Food' and 'Housing' indices.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['All items', 'Food', 'Housing']].isnull().sum()
+if missing_values.any():
+    # Handle missing values by dropping rows with any missing values in these columns
+    df = df.dropna(subset=['All items', 'Food', 'Housing'])
+
+# Prepare the features and target variable
+X = df[['Food', 'Housing']]
+y = df['All items']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the linear regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+else:
+    # Print the summary of the regression model
+    print(model.summary())
+```","In this code, we first create a copy of the DataFrame to avoid modifying the original data. We then check for missing values in the 'All items', 'Food', and 'Housing' columns and drop any rows that contain missing values in these columns. Next, we prepare our feature set (X) and target variable (y), ensuring they are converted to float type. We add a constant term to the predictors to account for the intercept in the regression model. Finally, we attempt to fit the linear regression model using statsmodels' OLS function and handle any exceptions that may arise during the fitting process. If the model fitting is successful, we print the summary of the regression results, which includes coefficients, R-squared values, and other statistical metrics.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['All items', 'Food', 'Housing']].isnull().sum()
+if missing_values.any():
+    # Handle missing values by dropping rows with any missing values in these columns
+    df = df.dropna(subset=['All items', 'Food', 'Housing'])
+
+# Prepare the features and target variable
+X = df[['Food', 'Housing']]
+y = df['All items']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the linear regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+else:
+    # Print the summary of the regression model
+    print(model.summary())
+```"
+Logistic Regression,"Create a logistic regression model to classify years with high 'All items, less imputed rent' based on 'Gas' and 'Electricity' expenses.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Step 1: Define the target variable
+median_value = df['All items, less imputed rent'].median()
+df['High Rent'] = (df['All items, less imputed rent'] > median_value).astype(int)
+
+# Step 2: Prepare the features and target variable
+X = df[['Gas', 'Electricity']]
+y = df['High Rent']
+
+# Step 3: Check for missing values
+if X.isnull().any().any() or y.isnull().any():
+    raise ValueError(""Missing values found in the dataset. Please handle them before fitting the model."")
+
+# Step 4: Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Step 5: Add a constant to the model
+X = sm.add_constant(X)
+
+# Step 6: Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+print(result.summary())
+```","In this analysis, we first defined a binary target variable 'High Rent' based on whether 'All items, less imputed rent' exceeds its median value. We then prepared the feature set consisting of 'Gas' and 'Electricity' expenses. After checking for missing values and converting the data types to float, we added a constant term to the predictor variables. Finally, we fitted a logistic regression model using statsmodels and printed the summary of the model to evaluate its performance. This approach allows us to classify years based on their expenses in relation to the defined threshold for 'All items, less imputed rent'.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Step 1: Define the target variable
+median_value = df['All items, less imputed rent'].median()
+df['High Rent'] = (df['All items, less imputed rent'] > median_value).astype(int)
+
+# Step 2: Prepare the features and target variable
+X = df[['Gas', 'Electricity']]
+y = df['High Rent']
+
+# Step 3: Check for missing values
+if X.isnull().any().any() or y.isnull().any():
+    raise ValueError(""Missing values found in the dataset. Please handle them before fitting the model."")
+
+# Step 4: Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Step 5: Add a constant to the model
+X = sm.add_constant(X)
+
+# Step 6: Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+print(result.summary())
+```"
+Multiple Regression,"Develop a multiple regression model to predict 'All items, less fresh food' using 'Cereals', 'Meats', and 'Beverages'.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['All items, less fresh food', 'Cereals', 'Meats', 'Beverages']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Handling missing values by dropping rows with any missing values
+    df = df.dropna(subset=['All items, less fresh food', 'Cereals', 'Meats', 'Beverages'])
+
+# Define the predictor variables (X) and the response variable (y)
+X = df[['Cereals', 'Meats', 'Beverages']]
+y = df['All items, less fresh food']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor variables
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","In this code, we first check for missing values in the columns of interest. If any missing values are found, we print the counts and drop the rows with missing values to ensure our regression analysis is valid. We then define our predictor variables (Cereals, Meats, and Beverages) and the response variable (All items, less fresh food). After converting these variables to float, we add a constant term to the predictors to account for the intercept in the regression model. Finally, we fit the model using the Ordinary Least Squares (OLS) method from the statsmodels library and print the summary of the model, which includes coefficients, R-squared values, and other statistical metrics. If the model fitting fails, we catch the exception and print an error message.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['All items, less fresh food', 'Cereals', 'Meats', 'Beverages']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Handling missing values by dropping rows with any missing values
+    df = df.dropna(subset=['All items, less fresh food', 'Cereals', 'Meats', 'Beverages'])
+
+# Define the predictor variables (X) and the response variable (y)
+X = df[['Cereals', 'Meats', 'Beverages']]
+y = df['All items, less fresh food']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor variables
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```"
+Time Series Analysis,Conduct a time series analysis to forecast the 'All items' index for the next 5 years.,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.tsa.arima.model import ARIMA
+import warnings
+
+# Suppress warnings
+warnings.filterwarnings(""ignore"")
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().values.any():
+    print(""Missing values found in the dataset. Filling missing values with forward fill method."")
+    df.fillna(method='ffill', inplace=True)
+
+# Ensure 'Year' is the index and convert it to datetime
+df['Year'] = pd.to_datetime(df['Year'], format='%Y')
+df.set_index('Year', inplace=True)
+
+# Check if there are enough observations for seasonal decomposition
+if len(df) < 12:
+    raise ValueError(""Not enough observations for seasonal decomposition. At least 12 observations are required."")
+
+# Perform seasonal decomposition
+decomposition = sm.tsa.seasonal_decompose(df['All items'], model='additive', period=12)
+trend = decomposition.trend.dropna()
+seasonal = decomposition.seasonal.dropna()
+residual = decomposition.resid.dropna()
+
+# Fit an ARIMA model
+model = ARIMA(df['All items'], order=(1, 1, 1))  # Adjust the order as necessary
+try:
+    model_fit = model.fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Forecast the next 5 years (60 months)
+forecast = model_fit.forecast(steps=60)
+forecast_index = pd.date_range(start=df.index[-1] + pd.DateOffset(months=1), periods=60, freq='M')
+forecast_series = pd.Series(forecast, index=forecast_index)
+
+# Output the forecast
+print(forecast_series)
+```","The code begins by checking for missing values in the dataset and fills them using the forward fill method. The 'Year' column is converted to a datetime format and set as the index of the DataFrame. We then check if there are enough observations for seasonal decomposition, which requires at least 12 data points. The seasonal decomposition is performed to extract the trend, seasonal, and residual components of the 'All items' index. An ARIMA model is fitted to the data, and if the fitting fails, a clear error message is provided. Finally, the model is used to forecast the 'All items' index for the next 5 years, and the forecasted values are printed.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.tsa.arima.model import ARIMA
+import warnings
+
+# Suppress warnings
+warnings.filterwarnings(""ignore"")
+
+# Create a copy of the original DataFrame
+df = pd.read_csv('2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv')
+
+# Check for missing values
+if df.isnull().values.any():
+    print(""Missing values found in the dataset. Filling missing values with forward fill method."")
+    df.fillna(method='bfill', inplace=True)
+
+# Ensure 'Year' is the index and convert it to datetime
+df['Year'] = pd.to_datetime(df['Year'], format='%Y')
+df.set_index('Year', inplace=True)
+
+# Check if there are enough observations for seasonal decomposition
+if len(df) < 12:
+    raise ValueError(""Not enough observations for seasonal decomposition. At least 12 observations are required."")
+
+# Perform seasonal decomposition
+decomposition = sm.tsa.seasonal_decompose(df['All items'], model='additive', period=12)
+trend = decomposition.trend.dropna()
+seasonal = decomposition.seasonal.dropna()
+residual = decomposition.resid.dropna()
+
+# Fit an ARIMA model
+model = ARIMA(df['All items'], order=(1, 1, 1))  # Adjust the order as necessary
+try:
+    model_fit = model.fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Forecast the next 5 years (60 months)
+forecast = model_fit.forecast(steps=60)
+forecast_series = pd.Series(forecast)
+
+# Output the forecast
+print(forecast)
+"
+Interaction Effects,"Examine the interaction effects between 'Fuel, light & water charges' and 'Housing' on 'All items, less food (less alcoholic beverages) and energy'.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['Fuel, light & water charges', 'Housing', 'All items, less food (less alcoholic beverages) and energy']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Handle missing values by dropping rows with any missing values
+    df = df.dropna(subset=['Fuel, light & water charges', 'Housing', 'All items, less food (less alcoholic beverages) and energy'])
+
+# Prepare the independent variables (X) and dependent variable (y)
+X = df[['Fuel, light & water charges', 'Housing']]
+y = df['All items, less food (less alcoholic beverages) and energy']
+
+# Create interaction term
+X['Interaction'] = X['Fuel, light & water charges'] * X['Housing']
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","In this code, we first check for missing values in the relevant columns and drop any rows that contain them. We then prepare our independent variables (X) and dependent variable (y) for the regression analysis. An interaction term is created by multiplying 'Fuel, light & water charges' and 'Housing'. We add a constant to the model and convert the data types to float to ensure compatibility with the regression model. Finally, we fit the OLS regression model and print the summary of the results. If the model fitting fails, an error message will be displayed.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['Fuel, light & water charges', 'Housing', 'All items, less food (less alcoholic beverages) and energy']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Handle missing values by dropping rows with any missing values
+    df = df.dropna(subset=['Fuel, light & water charges', 'Housing', 'All items, less food (less alcoholic beverages) and energy'])
+
+# Prepare the independent variables (X) and dependent variable (y)
+X = df[['Fuel, light & water charges', 'Housing']]
+y = df['All items, less food (less alcoholic beverages) and energy']
+
+# Create interaction term
+X['Interaction'] = X['Fuel, light & water charges'] * X['Housing']
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```"
+Correlation Analysis,Calculate the correlation between 'Fresh food' and 'Medical care' over the years.,"```python
+import pandas as pd
+import numpy as np
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['Fresh food', 'Medical care']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Handle missing values by dropping rows with any missing values in the relevant columns
+    df = df.dropna(subset=['Fresh food', 'Medical care'])
+
+# Extract the relevant columns
+X = df[['Fresh food']]
+y = df['Medical care']
+
+# Convert to float for model fitting
+X = X.astype(float)
+y = y.astype(float)
+
+# Calculate the correlation
+correlation = X.corrwith(y).iloc[0]
+print(f""The correlation between 'Fresh food' and 'Medical care' is: {correlation}"")
+```","The code begins by checking for missing values in the 'Fresh food' and 'Medical care' columns. If any missing values are found, it prints the count of missing values and drops the rows with missing data in these columns. After cleaning the data, it extracts the relevant columns and converts them to float type. Finally, it calculates the correlation between 'Fresh food' and 'Medical care' using the `corrwith` method and prints the result. This analysis will provide insight into how the prices of fresh food and medical care are related over the years in Japan.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import numpy as np
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['Fresh food', 'Medical care']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Handle missing values by dropping rows with any missing values in the relevant columns
+    df = df.dropna(subset=['Fresh food', 'Medical care'])
+
+# Extract the relevant columns
+X = df[['Fresh food']]
+y = df['Medical care']
+
+# Convert to float for model fitting
+X = X.astype(float)
+y = y.astype(float)
+
+# Calculate the correlation
+correlation = X.corrwith(y).iloc[0]
+print(f""The correlation between 'Fresh food' and 'Medical care' is: {correlation}"")
+```"
+Logistic Regression,"Build a logistic regression model to predict high 'Housing, less imputed rent' expenses based on 'Repairs & maintenance' and 'Rent'.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Define the threshold for high 'Housing, less imputed rent' expenses
+median_housing = df['Housing, less imputed rent'].median()
+df['High_Housing'] = (df['Housing, less imputed rent'] > median_housing).astype(int)
+
+# Check for missing values in the relevant columns
+missing_values = df[['Repairs & maintenance', 'Rent', 'High_Housing']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Drop rows with missing values
+    df = df.dropna(subset=['Repairs & maintenance', 'Rent', 'High_Housing'])
+
+# Prepare the features and target variable
+X = df[['Repairs & maintenance', 'Rent']]
+y = df['High_Housing']
+
+# Ensure the data types are correct
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+    print(result.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","In this code, we first create a binary variable 'High_Housing' to indicate whether the 'Housing, less imputed rent' expenses are above the median. We then check for missing values in the relevant columns and drop any rows with missing data to ensure a clean dataset for modeling. The features 'Repairs & maintenance' and 'Rent' are prepared for the logistic regression model, and we ensure they are in float format. A constant term is added to the predictor variables before fitting the logistic regression model using statsmodels. Finally, we handle any potential errors during model fitting and print the summary of the model results.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Define the threshold for high 'Housing, less imputed rent' expenses
+median_housing = df['Housing, less imputed rent'].median()
+df['High_Housing'] = (df['Housing, less imputed rent'] > median_housing).astype(int)
+
+# Check for missing values in the relevant columns
+missing_values = df[['Repairs & maintenance', 'Rent', 'High_Housing']].isnull().sum()
+if missing_values.any():
+    print(""Missing values found in the following columns:"")
+    print(missing_values[missing_values > 0])
+    # Drop rows with missing values
+    df = df.dropna(subset=['Repairs & maintenance', 'Rent', 'High_Housing'])
+
+# Prepare the features and target variable
+X = df[['Repairs & maintenance', 'Rent']]
+y = df['High_Housing']
+
+# Ensure the data types are correct
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+    print(result.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```"
+Chi-Square Test,Perform a Chi-Square test to determine if there's an association between high 'Food' index and 'Meals outside the home'.,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from scipy.stats import chi2_contingency
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values
+if df[['Food', 'Meals outside the home']].isnull().any().any():
+    df = df.dropna(subset=['Food', 'Meals outside the home'])
+
+# Define a threshold for high 'Food' index
+food_threshold = df['Food'].mean()
+
+# Create a new categorical variable for 'Food' index
+df['Food_Category'] = np.where(df['Food'] > food_threshold, 'High', 'Low')
+
+# Create a contingency table
+contingency_table = pd.crosstab(df['Food_Category'], df['Meals outside the home'])
+
+# Perform the Chi-Square test
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+# Output the results
+print(f""Chi-Square Statistic: {chi2}"")
+print(f""P-Value: {p}"")
+print(f""Degrees of Freedom: {dof}"")
+print(f""Expected Frequencies:\n{expected}"")
+```","In this analysis, we first checked for missing values in the 'Food' and 'Meals outside the home' columns and dropped any rows with missing data. We then categorized the 'Food' index into 'High' and 'Low' based on the mean value. A contingency table was created to summarize the counts of high and low 'Food' index against the counts of 'Meals outside the home'. Finally, we performed a Chi-Square test to determine if there is a statistically significant association between the two categorical variables. The results include the Chi-Square statistic, p-value, degrees of freedom, and expected frequencies, which will help us interpret the association.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from scipy.stats import chi2_contingency
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values
+if df[['Food', 'Meals outside the home']].isnull().any().any():
+    df = df.dropna(subset=['Food', 'Meals outside the home'])
+
+# Define a threshold for high 'Food' index
+food_threshold = df['Food'].mean()
+
+# Create a new categorical variable for 'Food' index
+df['Food_Category'] = np.where(df['Food'] > food_threshold, 'High', 'Low')
+
+# Create a contingency table
+contingency_table = pd.crosstab(df['Food_Category'], df['Meals outside the home'])
+
+# Perform the Chi-Square test
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+# Output the results
+print(f""Chi-Square Statistic: {chi2}"")
+print(f""P-Value: {p}"")
+print(f""Degrees of Freedom: {dof}"")
+print(f""Expected Frequencies:\n{expected}"")
+```"
+Polynomial Regression,Apply a polynomial regression model to fit the trend of 'Cakes & candies' index over time.,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from sklearn.preprocessing import PolynomialFeatures
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df[['Year', 'Cakes & candies']].isnull().any().any():
+    # Handle missing values by dropping them
+    df = df.dropna(subset=['Year', 'Cakes & candies'])
+
+# Define independent variable X and dependent variable y
+X = df[['Year']]
+y = df['Cakes & candies']
+
+# Create polynomial features
+degree = 2  # You can change the degree for higher polynomial regression
+poly = PolynomialFeatures(degree=degree)
+X_poly = poly.fit_transform(X)
+
+# Add a constant term to the predictor
+X_poly = sm.add_constant(X_poly)
+
+# Fit the polynomial regression model
+try:
+    model = sm.OLS(y.astype(float), X_poly.astype(float)).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```","In this code, we first create a copy of the DataFrame to avoid modifying the original data. We then check for missing values in the 'Year' and 'Cakes & candies' columns and drop any rows with missing values. Next, we define our independent variable \(X\) as the 'Year' and our dependent variable \(y\) as the 'Cakes & candies' index. We create polynomial features of degree 2 (which can be adjusted) using `PolynomialFeatures` from sklearn. After that, we add a constant term to the predictor matrix and fit the polynomial regression model using statsmodels' OLS method. Finally, we print the summary of the model to evaluate the fit. If the model fitting fails, we catch the exception and print an error message.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,1.0,True,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from sklearn.preprocessing import PolynomialFeatures
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df[['Year', 'Cakes & candies']].isnull().any().any():
+    # Handle missing values by dropping them
+    df = df.dropna(subset=['Year', 'Cakes & candies'])
+
+# Define independent variable X and dependent variable y
+X = df[['Year']]
+y = df['Cakes & candies']
+
+# Create polynomial features
+degree = 2  # You can change the degree for higher polynomial regression
+poly = PolynomialFeatures(degree=degree)
+X_poly = poly.fit_transform(X)
+
+# Add a constant term to the predictor
+X_poly = sm.add_constant(X_poly)
+
+# Fit the polynomial regression model
+try:
+    model = sm.OLS(y.astype(float), X_poly.astype(float)).fit()
+    print(model.summary())
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+```"
+Linear Regression,Determine if there is a linear relationship between Annual Income and Spending Score.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and loaded
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Dropping missing values for simplicity
+
+# Define independent and dependent variables
+X = df[['Annual Income ($)']]
+y = df['Spending Score (1-100)']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Print the summary of the regression model
+print(model.summary())
+```","In this analysis, we are performing a linear regression to explore the relationship between Annual Income and Spending Score. We first check for missing values and handle them by dropping any rows with missing data. We then define our independent variable (Annual Income) and dependent variable (Spending Score), ensuring they are in float format for the model fitting. A constant term is added to the predictor to account for the intercept in the regression equation. Finally, we fit the model using Ordinary Least Squares (OLS) and print the summary of the regression results, which will provide insights into the relationship between the two variables, including coefficients, R-squared value, and statistical significance.",Customers.csv,1.0,True,"import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+df = pd.read_csv('Customers.csv')
+
+
+# Create a scatter plot with a linear regression line
+sns.lmplot(x='Annual Income ($)', y='Spending Score (1-100)', data=df, aspect=2, height=6)
+plt.title('Annual Income vs Spending Score')
+plt.show()"
+Multiple Regression,"Analyze how Annual Income, Age, and Family Size together influence the Spending Score.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and loaded
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with any missing values."")
+    df = df.dropna()
+
+# Define the independent variables (X) and the dependent variable (y)
+X = df[['Annual Income ($)', 'Age', 'Family Size']]
+y = df['Spending Score (1-100)']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the model (intercept)
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+else:
+    # Print the summary of the regression model
+    print(model.summary())
+```","The code begins by checking for missing values in the dataset. If any are found, it drops the rows with missing values to ensure a clean dataset for analysis. Next, it defines the independent variables (Annual Income, Age, and Family Size) and the dependent variable (Spending Score). The independent variables are converted to float type, and a constant term is added to the model to account for the intercept. The Ordinary Least Squares (OLS) regression model is then fitted using statsmodels. If the model fitting fails, an error message is printed. Finally, the summary of the regression model is displayed, which includes coefficients, R-squared values, and other statistical metrics that help in understanding the influence of the independent variables on the Spending Score.",Customers.csv,1.0,True,"import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and loaded
+df = pd.read_csv('Customers.csv')
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found. Handling missing values by dropping rows with any missing values."")
+    df = df.dropna()
+
+# Define the independent variables (X) and the dependent variable (y)
+X = df[['Annual Income ($)', 'Age', 'Family Size']]
+y = df['Spending Score (1-100)']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Create the interaction term (Annual Income * Age * Family Size)
+X['Interaction'] = X['Annual Income ($)'] * X['Age'] * X['Family Size']
+
+# Add a constant to the model (intercept)
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+else:
+    # Print the summary of the regression model
+    print(model.summary())
+
+"
+Correlation Analysis,Assess the correlation between Age and Annual Income.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Age', 'Annual Income ($)']].isnull().any().any():
+    df = df.dropna(subset=['Age', 'Annual Income ($)'])
+
+# Define the independent variable (X) and dependent variable (y)
+X = df[['Age']]
+y = df['Annual Income ($)']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression
+model_summary = model.summary()
+print(model_summary)
+```","The code begins by checking for missing values in the 'Age' and 'Annual Income ($)' columns. If any missing values are found, those rows are dropped from the DataFrame. We then define our independent variable (X) as 'Age' and our dependent variable (y) as 'Annual Income ($)'. Both variables are converted to float to ensure compatibility with the regression model. A constant term is added to the predictor to account for the intercept in the regression equation. We then fit an Ordinary Least Squares (OLS) regression model using statsmodels. If the model fitting fails, a clear error message is raised. Finally, the summary of the regression model is printed, which includes important statistics such as coefficients, R-squared value, and p-values, allowing us to assess the correlation between Age and Annual Income.",Customers.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Age', 'Annual Income ($)']].isnull().any().any():
+    df = df.dropna(subset=['Age', 'Annual Income ($)'])
+
+# Define the independent variable (X) and dependent variable (y)
+X = df[['Age']]
+y = df['Annual Income ($)']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression
+model_summary = model.summary()
+print(model_summary)
+```"
+Chi-Square Test,"Determine if there is an association between Gender and Spending Score category (e.g., low, medium, high).","```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from scipy.stats import chi2_contingency
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Categorize Spending Score into low, medium, and high
+bins = [0, 33, 66, 100]
+labels = ['Low', 'Medium', 'High']
+df['Spending Score Category'] = pd.cut(df['Spending Score (1-100)'], bins=bins, labels=labels, right=True)
+
+# Create a contingency table
+contingency_table = pd.crosstab(df['Gender'], df['Spending Score Category'])
+
+# Perform the chi-squared test
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+# Output the results
+print(f""Chi-squared Statistic: {chi2}"")
+print(f""P-value: {p}"")
+print(f""Degrees of Freedom: {dof}"")
+print(f""Expected Frequencies:\n{expected}"")
+```","In this analysis, we first checked for any missing values in the dataset and dropped any rows that contained them. We then categorized the Spending Score into three distinct categories: low, medium, and high, based on predefined bins. A contingency table was created to summarize the counts of each category of Spending Score for each Gender. Finally, we performed a chi-squared test of independence to determine if there is a statistically significant association between Gender and Spending Score category. The results include the chi-squared statistic, p-value, degrees of freedom, and expected frequencies, which will help us interpret the association between these two categorical variables.",Customers.csv,1.0,True,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from scipy.stats import chi2_contingency
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Drop rows with missing values
+
+# Categorize Spending Score into low, medium, and high
+bins = [0, 33, 66, 100]
+labels = ['Low', 'Medium', 'High']
+df['Spending Score Category'] = pd.cut(df['Spending Score (1-100)'], bins=bins, labels=labels, right=True)
+
+# Create a contingency table
+contingency_table = pd.crosstab(df['Gender'], df['Spending Score Category'])
+
+# Perform the chi-squared test
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+
+# Output the results
+print(f""Chi-squared Statistic: {chi2}"")
+print(f""P-value: {p}"")
+print(f""Degrees of Freedom: {dof}"")
+print(f""Expected Frequencies:\n{expected}"")
+```"
+Linear Regression,Determine if there is a linear relationship between Malic acid and Alcohol content.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Malic acid', 'Alcohol']].isnull().any().any():
+    raise ValueError(""Missing values found in 'Malic acid' or 'Alcohol' columns."")
+
+# Define independent and dependent variables
+X = df[['Malic acid']]
+y = df['Alcohol']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression
+model_summary = model.summary()
+print(model_summary)
+```","The code begins by checking for missing values in the 'Malic acid' and 'Alcohol' columns. If any are found, it raises an error. We then define our independent variable (X) as 'Malic acid' and our dependent variable (y) as 'Alcohol', converting both to float types. A constant term is added to the predictor to account for the intercept in the regression model. We then attempt to fit an Ordinary Least Squares (OLS) regression model using statsmodels. If the model fitting fails for any reason, a runtime error is raised with a clear message. Finally, the summary of the regression model is printed, which includes coefficients, R-squared values, and other statistical metrics that help us understand the relationship between Malic acid and Alcohol content.",Wine_Dataset.csv,1.0,True,"
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+# Assuming df is already defined and contains the dataset
+df = pd.read_csv('Wine_Dataset.csv')
+
+sns.lmplot(x='Malic acid', y='Alcohol', data=df, aspect=2, height=6)
+plt.title('Malic Acid vs Alcohol Content')
+plt.show()
+"
+Logistic Regression,"Predict whether a sample has high OD280 based on Malic acid, Magnesium, and Total phenols.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and loaded
+df = df.copy()
+
+# Step 1: Define the target variable (high OD280)
+mean_od280 = df['OD280'].mean()
+df['High_OD280'] = (df['OD280'] > mean_od280).astype(int)
+
+# Step 2: Prepare the predictor variables (X) and target variable (y)
+X = df[['Malic acid', 'Magnesium', 'Total phenols']]
+y = df['High_OD280']
+
+# Step 3: Check for missing values
+if X.isnull().any().any() or y.isnull().any():
+    raise ValueError(""Missing values found in the dataset. Please handle them before proceeding."")
+
+# Step 4: Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Step 5: Add a constant to the predictor variables
+X = sm.add_constant(X)
+
+# Step 6: Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Step 7: Output the summary of the model
+print(result.summary())
+```","In this code, we first create a binary target variable `High_OD280` based on whether the OD280 value is above the mean. We then prepare our predictor variables, ensuring that there are no missing values. The predictor variables are converted to float, and a constant term is added to the model. We fit a logistic regression model using statsmodels and handle any potential errors during the fitting process. Finally, we print the summary of the model to evaluate the results.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and loaded
+df = df.copy()
+
+# Step 1: Define the target variable (high OD280)
+mean_od280 = df['OD280'].mean()
+df['High_OD280'] = (df['OD280'] > mean_od280).astype(int)
+
+# Step 2: Prepare the predictor variables (X) and target variable (y)
+X = df[['Malic acid', 'Magnesium', 'Total phenols']]
+y = df['High_OD280']
+
+# Step 3: Check for missing values
+if X.isnull().any().any() or y.isnull().any():
+    raise ValueError(""Missing values found in the dataset. Please handle them before proceeding."")
+
+# Step 4: Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Step 5: Add a constant to the predictor variables
+X = sm.add_constant(X)
+
+# Step 6: Fit the logistic regression model
+try:
+    model = sm.Logit(y, X)
+    result = model.fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Step 7: Output the summary of the model
+print(result.summary())
+```"
+Multiple Regression,"Analyze how Malic acid, Ashe, and Alcalinity of Ashe together influence Color intensity.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Malic acid', 'Ashe', 'Alcalinity of ashe', 'Color intensity']].isnull().any().any():
+    raise ValueError(""There are missing values in the selected columns. Please handle them before proceeding."")
+
+# Define the independent variables (X) and the dependent variable (y)
+X = df[['Malic acid', 'Ashe', 'Alcalinity of ashe']]
+y = df['Color intensity']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression
+model_summary = model.summary()
+print(model_summary)
+```","In this analysis, we are performing a linear regression to investigate how the variables Malic acid, Ashe, and Alcalinity of Ashe influence Color intensity in the wine dataset. We first check for missing values in the relevant columns and raise an error if any are found. We then prepare our independent variables (X) and dependent variable (y), ensuring they are in the correct format for regression analysis. A constant term is added to the predictor variables to account for the intercept in the regression model. Finally, we fit the model using Ordinary Least Squares (OLS) and print the summary of the regression results, which will provide insights into the relationships between the variables.",Wine_Dataset.csv,1.0,True,"import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Malic acid', 'Ashe', 'Alcalinity of ashe', 'Color intensity']].isnull().any().any():
+    raise ValueError(""There are missing values in the selected columns. Please handle them before proceeding."")
+
+# Define the independent variables (X) and the dependent variable (y)
+X = df[['Malic acid', 'Ashe', 'Alcalinity of ashe']]
+y = df['Color intensity']
+
+# Create interaction terms
+X['Malic_Acid_Ashe'] = X['Malic acid'] * X['Ashe']
+X['Malic_Acid_Alcalinity'] = X['Malic acid'] * X['Alcalinity of ashe']
+X['Ashe_Alcalinity'] = X['Ashe'] * X['Alcalinity of ashe']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression
+model_summary = model.summary()
+print(model_summary)
+
+"
+ANOVA,Test if the mean OD280 differs significantly across different levels of Flavanoids.,"```python
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in OD280 and Flavanoidse
+if df[['OD280', 'Flavanoidse']].isnull().any().any():
+    df = df.dropna(subset=['OD280', 'Flavanoidse'])
+
+# Categorize Flavanoidse into bins
+df['Flavanoidse_cat'] = pd.cut(df['Flavanoidse'], bins=3, labels=[""Low"", ""Medium"", ""High""])
+
+# Fit the ANOVA model
+model = ols('OD280 ~ C(Flavanoidse_cat)', data=df).fit()
+
+# Perform ANOVA
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+```","In this analysis, we first checked for missing values in the columns of interest (OD280 and Flavanoidse) and dropped any rows with missing data to ensure the integrity of our analysis. We then categorized the continuous variable Flavanoidse into three groups (Low, Medium, High) to facilitate the comparison of means across these categories. Using the `statsmodels` library, we fitted an ANOVA model with OD280 as the dependent variable and the categorized Flavanoidse as the independent variable. Finally, we performed the ANOVA test and printed the results, which will indicate whether there are significant differences in the mean OD280 across the different levels of Flavanoidse.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in OD280 and Flavanoidse
+if df[['OD280', 'Flavanoidse']].isnull().any().any():
+    df = df.dropna(subset=['OD280', 'Flavanoidse'])
+
+# Categorize Flavanoidse into bins
+df['Flavanoidse_cat'] = pd.cut(df['Flavanoidse'], bins=3, labels=[""Low"", ""Medium"", ""High""])
+
+# Fit the ANOVA model
+model = ols('OD280 ~ C(Flavanoidse_cat)', data=df).fit()
+
+# Perform ANOVA
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+```"
+Time Series Analysis,Analyze the trend in Proline levels as a function of Alcohol content.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Proline', 'Alcohol']].isnull().any().any():
+    df = df.dropna(subset=['Proline', 'Alcohol'])
+
+# Define the dependent and independent variables
+X = df[['Alcohol']]
+y = df['Proline']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    results = model.summary()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the results
+print(results)
+```","In this analysis, we are performing a linear regression to understand how Proline levels vary with Alcohol content. We first check for missing values in the relevant columns and drop any rows with missing data. We then define our independent variable (Alcohol) and dependent variable (Proline), ensuring they are in float format. A constant term is added to the predictor to account for the intercept in the regression model. Finally, we fit the model using statsmodels and print the summary of the regression results, which will provide insights into the relationship between Proline and Alcohol.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Proline', 'Alcohol']].isnull().any().any():
+    df = df.dropna(subset=['Proline', 'Alcohol'])
+
+# Define the dependent and independent variables
+X = df[['Alcohol']]
+y = df['Proline']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    results = model.summary()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the results
+print(results)
+```"
+Interaction Effects,Examine the interaction effect between Magnesium and Total phenols on Color intensity.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in the relevant columns
+if df[['Magnesium', 'Total phenols', 'Color intensity']].isnull().any().any():
+    raise ValueError(""Missing values found in Magnesium, Total phenols, or Color intensity columns."")
+
+# Prepare the independent variables (X) and dependent variable (y)
+X = df[['Magnesium', 'Total phenols']]
+y = df['Color intensity']
+
+# Create an interaction term
+X['Interaction'] = X['Magnesium'] * X['Total phenols']
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Print the summary of the regression results
+print(model.summary())
+```","In this code, we first create a copy of the DataFrame to avoid modifying the original data. We check for missing values in the columns of interest and raise an error if any are found. We then prepare the independent variables (Magnesium and Total phenols) and the dependent variable (Color intensity). An interaction term is created by multiplying Magnesium and Total phenols. We add a constant term to the predictor variables and convert them to float type. Finally, we fit an Ordinary Least Squares (OLS) regression model using `statsmodels` and print the summary of the results, which will provide insights into the interaction effect between Magnesium and Total phenols on Color intensity.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in the relevant columns
+if df[['Magnesium', 'Total phenols', 'Color intensity']].isnull().any().any():
+    raise ValueError(""Missing values found in Magnesium, Total phenols, or Color intensity columns."")
+
+# Prepare the independent variables (X) and dependent variable (y)
+X = df[['Magnesium', 'Total phenols']]
+y = df['Color intensity']
+
+# Create an interaction term
+X['Interaction'] = X['Magnesium'] * X['Total phenols']
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Print the summary of the regression results
+print(model.summary())
+```"
+Correlation Analysis,Assess the correlation between Malic acid and Proline.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+if df[['Malic acid', 'Proline']].isnull().any().any():
+    df = df.dropna(subset=['Malic acid', 'Proline'])
+
+# Define the independent variable (X) and dependent variable (y)
+X = df[['Malic acid']]
+y = df['Proline']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    results = model.summary()
+except Exception as e:
+    results = f""Model fitting failed: {e}""
+
+results
+```","In this analysis, we first checked for missing values in the columns of interest, Malic acid and Proline, and dropped any rows with missing data. We then defined our independent variable (Malic acid) and dependent variable (Proline), ensuring they were in the correct float format. A constant term was added to the predictor to account for the intercept in the regression model. Finally, we fitted an Ordinary Least Squares (OLS) regression model using statsmodels and captured the summary of the results. If the model fitting fails for any reason, an error message will be provided.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the relevant data
+df = df.copy()
+
+# Check for missing values in the relevant columns
+if df[['Malic acid', 'Proline']].isnull().any().any():
+    df = df.dropna(subset=['Malic acid', 'Proline'])
+
+# Define the independent variable (X) and dependent variable (y)
+X = df[['Malic acid']]
+y = df['Proline']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+    results = model.summary()
+except Exception as e:
+    results = f""Model fitting failed: {e}""
+
+results
+```"
+Chi-Square Test,Determine if there is an association between Alcohol content categories and high or low Color intensity.,"```python
+import pandas as pd
+import statsmodels.api as sm
+import numpy as np
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found in the dataset. Please handle them before proceeding."")
+else:
+    # Create a binary variable for Color intensity based on the median
+    median_color_intensity = df['Color intensity'].median()
+    df['Color_intensity_category'] = np.where(df['Color intensity'] > median_color_intensity, 'High', 'Low')
+
+    # Create a categorical variable for Alcohol content
+    df['Alcohol_category'] = np.where(df['Alcohol'] > df['Alcohol'].median(), 'High', 'Low')
+
+    # Prepare the data for logistic regression
+    X = pd.get_dummies(df['Alcohol_category'], drop_first=True)  # Convert to dummy variables
+    y = df['Color_intensity_category']
+
+    # Convert y to a binary format
+    y = np.where(y == 'High', 1, 0)
+
+    # Add a constant to the model
+    X = sm.add_constant(X)
+
+    # Fit the logistic regression model
+    try:
+        model = sm.Logit(y.astype(float), X.astype(float))
+        result = model.fit()
+        print(result.summary())
+    except Exception as e:
+        print(f""Model fitting failed: {e}"")
+```","In this analysis, we first checked for missing values in the dataset. If any were found, we would need to handle them before proceeding. We then categorized the Alcohol content into ""High"" and ""Low"" based on the median value. Similarly, we created a binary variable for Color intensity, labeling values above the median as ""High"" and those below as ""Low"". We used dummy variables for the Alcohol categories to prepare the data for logistic regression. Finally, we fitted a logistic regression model to assess the association between Alcohol content categories and Color intensity categories, while ensuring that all variables were correctly processed and converted to the appropriate types. If the model fitting fails, a clear error message will be provided.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import statsmodels.api as sm
+import numpy as np
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""Missing values found in the dataset. Please handle them before proceeding."")
+else:
+    # Create a binary variable for Color intensity based on the median
+    median_color_intensity = df['Color intensity'].median()
+    df['Color_intensity_category'] = np.where(df['Color intensity'] > median_color_intensity, 'High', 'Low')
+
+    # Create a categorical variable for Alcohol content
+    df['Alcohol_category'] = np.where(df['Alcohol'] > df['Alcohol'].median(), 'High', 'Low')
+
+    # Prepare the data for logistic regression
+    X = pd.get_dummies(df['Alcohol_category'], drop_first=True)  # Convert to dummy variables
+    y = df['Color_intensity_category']
+
+    # Convert y to a binary format
+    y = np.where(y == 'High', 1, 0)
+
+    # Add a constant to the model
+    X = sm.add_constant(X)
+
+    # Fit the logistic regression model
+    try:
+        model = sm.Logit(y.astype(float), X.astype(float))
+        result = model.fit()
+        print(result.summary())
+    except Exception as e:
+        print(f""Model fitting failed: {e}"")
+```"
+Polynomial Regression,Model the relationship between Magnesium and OD280 using a polynomial regression approach.,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from sklearn.preprocessing import PolynomialFeatures
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Magnesium', 'OD280']].isnull().any().any():
+    raise ValueError(""Missing values found in Magnesium or OD280 columns."")
+
+# Define independent and dependent variables
+X = df[['Magnesium']]
+y = df['OD280']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Create polynomial features
+poly = PolynomialFeatures(degree=2)  # Change degree as needed for polynomial regression
+X_poly = poly.fit_transform(X)
+
+# Add constant term for statsmodels
+X_poly = sm.add_constant(X_poly)
+
+# Fit the model
+try:
+    model = sm.OLS(y, X_poly).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+model_summary = model.summary()
+print(model_summary)
+```","In this code, we first check for any missing values in the relevant columns (Magnesium and OD280) and raise an error if any are found. We then define our independent variable (X) and dependent variable (y), converting them to float as required. We create polynomial features for Magnesium to allow for a polynomial regression analysis. After adding a constant term to the predictors, we fit the Ordinary Least Squares (OLS) regression model using statsmodels. If the model fitting fails, we catch the exception and provide a clear error message. Finally, we print the summary of the fitted model, which includes important statistics about the regression analysis.",Wine_Dataset.csv,1.0,True,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from sklearn.preprocessing import PolynomialFeatures
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Magnesium', 'OD280']].isnull().any().any():
+    raise ValueError(""Missing values found in Magnesium or OD280 columns."")
+
+# Define independent and dependent variables
+X = df[['Magnesium']]
+y = df['OD280']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Create polynomial features
+poly = PolynomialFeatures(degree=2)  # Change degree as needed for polynomial regression
+X_poly = poly.fit_transform(X)
+
+# Add constant term for statsmodels
+X_poly = sm.add_constant(X_poly)
+
+# Fit the model
+try:
+    model = sm.OLS(y, X_poly).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+model_summary = model.summary()
+print(model_summary)
+```"
+Interaction Effects,Analyze the interaction effect between the number of bedrooms and whether a house has a basement on house prices.,"```python
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in relevant columns
+missing_values = df[['price', 'bedrooms', 'basement']].isnull().sum()
+if missing_values.any():
+    raise ValueError(f""Missing values found in columns: {missing_values[missing_values > 0].index.tolist()}"")
+
+# Convert 'basement' to a categorical variable
+df['basement'] = df['basement'].astype('category')
+
+# Define the regression formula with interaction term
+formula = 'price ~ bedrooms * basement'
+
+# Prepare the data for regression
+X = df[['bedrooms', 'basement']]
+y = df['price']
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Fit the model
+try:
+    model = sm.OLS(y.astype(float), X.astype(float)).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+model_summary = model.summary()
+print(model_summary)
+```","The code begins by creating a copy of the DataFrame to avoid modifying the original data. It checks for missing values in the relevant columns and raises an error if any are found. The 'basement' column is converted to a categorical variable to ensure proper handling in the regression model. The regression formula is defined to include an interaction term between the number of bedrooms and the basement variable. The model is then fitted using the Ordinary Least Squares (OLS) method from the statsmodels library, and any errors during the fitting process are caught and reported. Finally, the summary of the fitted model is printed, which will provide insights into the interaction effect on house prices.",Housing copy.csv,0.0,False,"import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in relevant columns
+missing_values = df[['price', 'bedrooms', 'basement']].isnull().sum()
+if missing_values.any():
+    raise ValueError(f""Missing values found in columns: {missing_values[missing_values > 0].index.tolist()}"")
+
+value_dict = {x:i for x,i in zip(df['basement'].unique(),range(len(df['basement'].unique())))}
+
+# Convert 'basement' to a categorical variable
+df['basement'] = df['basement'].map(value_dict)
+
+# Define the regression formula with interaction term
+formula = 'price ~ bedrooms * basement'
+
+# Prepare the data for regression
+X = df[['bedrooms', 'basement']]
+y = df['price']
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Fit the model
+try:
+    model = sm.OLS(y.astype(float), X.astype(float)).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+model_summary = model.summary()
+print(model_summary)"
+ANOVA,Perform an ANOVA to analyze the difference in 'Food' index across different years.,"```python
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'Food' and 'Year'
+if df[['Food', 'Year']].isnull().any().any():
+    # Drop rows with missing values in 'Food' or 'Year'
+    df = df.dropna(subset=['Food', 'Year'])
+
+# Ensure 'Year' is treated as a categorical variable
+df['Year'] = df['Year'].astype('category')
+
+# Fit the ANOVA model
+model = ols('Food ~ C(Year)', data=df).fit()
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+```","In this code, we first create a copy of the DataFrame to avoid modifying the original data. We then check for missing values in the 'Food' and 'Year' columns and drop any rows that contain missing values. The 'Year' column is converted to a categorical type to ensure it is treated correctly in the ANOVA analysis. We then fit an ANOVA model using the `ols` function from `statsmodels`, specifying 'Food' as the dependent variable and 'Year' as the independent variable. Finally, we generate the ANOVA table using `sm.stats.anova_lm`, which provides the results of the analysis, including the F-statistic and p-values to assess the significance of the differences in the 'Food' index across different years.",2022_Japan_CPI_GoodsAndServiceClassificationIndex.csv,0.0,False,"
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in 'Food' and 'Year'
+if df[['Food', 'Year']].isnull().any().any():
+    # Drop rows with missing values in 'Food' or 'Year'
+    df = df.dropna(subset=['Food', 'Year'])
+
+# Ensure 'Year' is treated as a categorical variable
+df['Year'] = df['Year'].astype('category')
+
+# Fit the ANOVA model
+model = ols('Food ~ C(Year)', data=df).fit()
+try:
+    anova_table = sm.stats.anova_lm(model, typ=2)
+    print(anova_table)
+except ValueError as e:
+    print(""The data is ill-specified, using this statistical model is not appropriate"")
+except Exception as e:
+    print(""An error has occured"",e)
+    
+
+"
+Logistic Regression,"Predict the likelihood of a customer having a high Spending Score based on their Annual Income, Age, and Work Experience.","```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+
+# Step 1: Check for missing values
+if df.isnull().sum().any():
+    raise ValueError(""The dataset contains missing values. Please handle them before proceeding."")
+
+# Step 2: Create a binary target variable for high Spending Score
+df['High Spending Score'] = (df['Spending Score (1-100)'] >= 50).astype(int)
+
+# Step 3: Define the predictor variables and the target variable
+X = df[['Annual Income ($)', 'Age', 'Work Experience']]
+y = df['High Spending Score']
+
+# Step 4: Add a constant to the predictor variables
+X = sm.add_constant(X)
+
+# Step 5: Fit the logistic regression model
+try:
+    model = sm.Logit(y.astype(float), X.astype(float))
+    result = model.fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Step 6: Output the summary of the model
+print(result.summary())
+```","The code begins by checking for missing values in the dataset. If any are found, it raises an error to prompt the user to handle them. Next, we create a binary target variable, 'High Spending Score', which indicates whether a customer's Spending Score is high (50 or above). We then select the predictor variables: Annual Income, Age, and Work Experience, and add a constant term to the predictors for the logistic regression model. Finally, we fit the logistic regression model using the `Logit` function from the statsmodels library and handle any potential errors during the fitting process. The summary of the model is printed to provide insights into the relationship between the predictors and the likelihood of having a high Spending Score.",Customers.csv,0.0,False,"
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+# Step 1: Check for missing values
+if df.isnull().sum().any():
+    print(""The dataset contains missing values. Please handle them before proceeding."")
+
+# Step 2: Create a binary target variable for high Spending Score
+df['High Spending Score'] = (df['Spending Score (1-100)'] >= 50).astype(int)
+
+# Step 3: Define the predictor variables and the target variable
+X = df[['Annual Income ($)', 'Age', 'Work Experience']]
+y = df['High Spending Score']
+
+# Step 4: Add a constant to the predictor variables
+X = sm.add_constant(X)
+
+# Step 5: Fit the logistic regression model
+try:
+    model = sm.Logit(y.astype(float), X.astype(float))
+    result = model.fit()
+# Step 6: Output the summary of the model
+    print(result.summary())
+except ValueError as e:
+    print(""The data is ill-specified, using this statistical model is not appropriate"")
+except Exception as e:
+    print(""An error has occured"",e)
+
+"
+ANOVA,Test if the mean Spending Score differs significantly across different Professions.,"```python
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+
+# Step 1: Check for missing values
+if df.isnull().values.any():
+    raise ValueError(""The dataset contains missing values. Please handle them before proceeding."")
+
+# Step 2: Define the model
+# We will use ols to fit the model
+model = ols('Q(""Spending Score (1-100)"") ~ C(Profession)', data=df).fit()
+
+# Step 3: Perform ANOVA
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+```","The code performs an ANOVA test to determine if there are significant differences in the mean Spending Score across different professions. We first check for missing values in the dataset and raise an error if any are found. The model is defined using the ordinary least squares (OLS) method, treating 'Profession' as a categorical variable. Finally, we perform the ANOVA test and print the results, which will indicate whether the means are significantly different across the groups.",Customers.csv,0.0,False,"
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+
+
+# Step 1: Check for missing values
+if df.isnull().values.any():
+    print(""The dataset contains missing values. Please handle them before proceeding."")
+
+# Step 2: Define the model
+# We will use ols to fit the model
+model = ols('Q(""Spending Score (1-100)"") ~ C(Profession)', data=df).fit()
+
+# Step 3: Perform ANOVA
+anova_table = sm.stats.anova_lm(model, typ=2)
+
+# Output the ANOVA table
+print(anova_table)
+"
+Time Series Analysis,Analyze if there is a trend in Spending Score based on Age progression for the customers.,"```python
+import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and is a copy of the original dataset
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    df = df.dropna()  # Dropping missing values for simplicity
+
+# Define the dependent variable (y) and independent variables (X)
+y = df['Spending Score (1-100)']
+X = df[['Age', 'Gender', 'Profession']]
+
+# Convert categorical variables to the appropriate format
+X['Gender'] = pd.Categorical(X['Gender'])
+X['Profession'] = pd.Categorical(X['Profession'])
+
+# Add a constant to the model
+X = sm.add_constant(X)
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    print(f""Model fitting failed: {e}"")
+
+# Print the summary of the regression model
+print(model.summary())
+```","The code begins by checking for any missing values in the dataset and drops them if found. We then define our dependent variable (Spending Score) and independent variables (Age, Gender, and Profession). Categorical variables are converted to a suitable format for regression analysis. A constant term is added to the predictor variables to account for the intercept in the regression model. Finally, we fit the Ordinary Least Squares (OLS) regression model and print the summary of the results, which will provide insights into the relationship between Age and Spending Score, while also considering the effects of Gender and Profession.",Customers.csv,0.0,True,"import pandas as pd
+import statsmodels.api as sm
+
+# Assuming df is already defined and contains the dataset
+df = df.copy()
+
+# Check for missing values
+if df[['Malic acid', 'Ashe', 'Alcalinity of ashe', 'Color intensity']].isnull().any().any():
+    raise ValueError(""There are missing values in the selected columns. Please handle them before proceeding."")
+
+# Define the independent variables (X) and the dependent variable (y)
+X = df[['Malic acid', 'Ashe', 'Alcalinity of ashe']]
+y = df['Color intensity']
+
+# Create interaction terms
+X['Malic_Acid_Ashe'] = X['Malic acid'] * X['Ashe']
+X['Malic_Acid_Alcalinity'] = X['Malic acid'] * X['Alcalinity of ashe']
+X['Ashe_Alcalinity'] = X['Ashe'] * X['Alcalinity of ashe']
+
+# Convert X and y to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Add a constant term to the predictor
+X = sm.add_constant(X)
+
+# Fit the regression model
+try:
+    model = sm.OLS(y, X).fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression
+model_summary = model.summary()
+print(model_summary)
+
+"
+Interaction Effects,Examine the interaction effect between Gender and Profession on Spending Score.,"```python
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['Gender', 'Profession', 'Spending Score (1-100)']].isnull().sum()
+if missing_values.any():
+    raise ValueError(f""Missing values found in the following columns: {missing_values[missing_values > 0]}"")
+
+# Define the formula for the regression model
+formula = 'Q(""Spending Score (1-100)"") ~ C(Gender) * C(Profession)'
+
+# Fit the regression model
+try:
+    model = smf.ols(formula=formula, data=df).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression model
+model_summary = model.summary()
+print(model_summary)
+```","In this analysis, we are examining the interaction effect between Gender and Profession on Spending Score using an Ordinary Least Squares (OLS) regression model. We first check for any missing values in the relevant columns and handle them accordingly. The categorical variables Gender and Profession are processed using `C()` to ensure they are treated as categorical in the regression. The interaction term is included in the formula using the `*` operator. After fitting the model, we print the summary to interpret the results, which will provide insights into how the interaction between Gender and Profession affects Spending Score.",Customers.csv,0.0,False,"
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# Create a copy of the original DataFrame
+df = df.copy()
+
+# Check for missing values in the relevant columns
+missing_values = df[['Gender', 'Profession', 'Spending Score (1-100)']].isnull().sum()
+if missing_values.any():
+    print(f""Missing values found in the following columns: {missing_values[missing_values > 0]}"")
+
+# Define the formula for the regression model
+formula = 'Q(""Spending Score (1-100)"") ~ C(Gender) * C(Profession)'
+
+# Fit the regression model
+try:
+    model = smf.ols(formula=formula, data=df).fit()
+except Exception as e:
+    raise RuntimeError(f""Model fitting failed: {e}"")
+
+# Output the summary of the regression model
+model_summary = model.summary()
+print(model_summary)
+"
+Polynomial Regression,Model the relationship between Annual Income and Spending Score using a polynomial regression approach.,"```python
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from sklearn.preprocessing import PolynomialFeatures
+
+# Assuming df is already defined and loaded
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    raise ValueError(""The dataset contains missing values. Please handle them before proceeding."")
+
+# Define independent and dependent variables
+X = df[['Annual Income ($)']]
+y = df['Spending Score (1-100)']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Create polynomial features
+poly = PolynomialFeatures(degree=2)  # You can change the degree as needed
+X_poly = poly.fit_transform(X)
+
+# Add constant term for statsmodels
+X_poly = sm.add_constant(X_poly)
+
+# Fit the model
+try:
+    model = sm.OLS(y, X_poly).fit()
+except Exception as e:
+    raise ValueError(f""Model fitting failed: {e}"")
+
+# Output the summary of the model
+model_summary = model.summary()
+print(model_summary)
+```","The code performs polynomial regression to model the relationship between Annual Income and Spending Score. It first checks for missing values and raises an error if any are found. The independent variable is transformed into polynomial features, and a constant term is added to the model. The Ordinary Least Squares (OLS) method from statsmodels is used to fit the model, and any errors during fitting are caught and reported. Finally, the summary of the model is printed, which includes coefficients, R-squared values, and other statistical metrics.",Customers.csv,0.0,False,"
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from sklearn.preprocessing import PolynomialFeatures
+
+# Assuming df is already defined and loaded
+df = df.copy()
+
+# Check for missing values
+if df.isnull().sum().any():
+    print(""The dataset contains missing values. Please handle them before proceeding."")
+    # Optionally, you could handle missing values here, e.g., df = df.dropna()
+
+# Define independent and dependent variables
+X = df[['Annual Income ($)']]
+y = df['Spending Score (1-100)']
+
+# Convert to float
+X = X.astype(float)
+y = y.astype(float)
+
+# Create polynomial features
+poly = PolynomialFeatures(degree=2)  # You can change the degree as needed
+X_poly = poly.fit_transform(X)
+
+# Add a constant (intercept) to the model
+X_poly = sm.add_constant(X_poly)
+
+# Fit the polynomial regression model using Ordinary Least Squares (OLS)
+model = sm.OLS(y, X_poly).fit()
+
+# Output the summary of the model
+model_summary = model.summary()
+print(model_summary)
+"
