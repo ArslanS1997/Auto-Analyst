@@ -8,3 +8,5 @@ node_modules/
 React Frontend/
 
 Notebooks/
+
+.DS_Store
