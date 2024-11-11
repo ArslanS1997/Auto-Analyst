@@ -1,0 +1,10 @@
+# Ignore auto_analyst folder
+auto_analyst/
+
+# Ignore node_modules folder
+node_modules/
+
+# Ignore React Frontend folder (assuming the name of the folder is 'React Frontend')
+React Frontend/
+
+Notebooks/
