@@ -1,0 +1,150 @@
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [30/Nov/2024 16:22:51] "OPTIONS /api/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [30/Nov/2024 16:28:56] "OPTIONS /api/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [30/Nov/2024 16:34:37] "[33mPOST /api/upload HTTP/1.1[0m" 404 -
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+127.0.0.1 - - [30/Nov/2024 16:37:51] "OPTIONS /api/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [30/Nov/2024 16:38:21] "[35m[1mPOST /api/upload HTTP/1.1[0m" 500 -
+127.0.0.1 - - [30/Nov/2024 16:38:24] "OPTIONS /api/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [30/Nov/2024 16:44:36] "[35m[1mPOST /api/upload HTTP/1.1[0m" 500 -
+127.0.0.1 - - [30/Nov/2024 16:45:25] "OPTIONS /api/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [30/Nov/2024 16:46:57] "[33mOPTIONS /api/chat HTTP/1.1[0m" 404 -
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\backend.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\marketing_analytics_agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\memory_agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\new_frontend.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\retrievers.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\_pytest\\cacheprovider.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\_pytest\\fixtures.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\__init__.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\delta_generator.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\alert.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\balloons.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\bokeh_chart.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\button.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\camera_input.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\chat.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\checkbox.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\code.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\color_picker.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\empty.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\exception.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\file_uploader.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\form.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\graphviz_chart.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\heading.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\doc_string.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\html.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\iframe.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\image.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\layouts.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\markdown.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\map.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\media.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\metric.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\multiselect.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\widgets\\number_input.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\streamlit\\elements\\plotly_chart.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\react-frontend\\node_modules\\flatted\\python\\test.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\react-frontend\\node_modules\\flatted\\python\\flatted.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\backend.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\backend.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\backend.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\marketing_analytics_agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\memory_agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\new_frontend.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\retrievers.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\agents.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\OneDrive\\Desktop\\projects\\Auto-Analyst\\backend.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+127.0.0.1 - - [01/Dec/2024 20:30:00] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Dec/2024 20:30:00] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Dec/2024 20:30:05] "[33mGET / HTTP/1.1[0m" 404 -
+127.0.0.1 - - [01/Dec/2024 20:30:22] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [01/Dec/2024 20:30:38] "[31m[1mGET /api/upload HTTP/1.1[0m" 400 -
+127.0.0.1 - - [01/Dec/2024 20:31:19] "[35m[1mGET /api/analyze HTTP/1.1[0m" 500 -
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\flask\\wrappers.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\werkzeug\\wrappers\\__init__.py', reloading
+ * Detected change in 'C:\\Users\\arsla\\anaconda3\\Lib\\site-packages\\werkzeug\\wrappers\\request.py', reloading
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (windowsapi)
+Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+ * Debugger is active!
+ * Debugger PIN: 916-665-390
+127.0.0.1 - - [01/Dec/2024 20:51:40] "[35m[1mGET /api/analyze HTTP/1.1[0m" 500 -
+127.0.0.1 - - [01/Dec/2024 20:52:00] "[35m[1mPOST /api/upload HTTP/1.1[0m" 500 -

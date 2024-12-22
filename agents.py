@@ -259,22 +259,21 @@ class data_viz_agent(dspy.Signature):
 class code_fix(dspy.Signature):
     # Called to fix unexecutable code
     """
-    You are an AI which fixes the data analytics code from another agent, your fixed code should only fix the faulty part of the code, rest should remain the same
-    You take the faulty code, and the error generated and generate the fixed code that performs the exact analysis the faulty code intends to do
-    You are also give user given context that guides you how to fix the code!
+You are an AI specializing in fixing faulty data analytics code provided by another agent. Your task is to:  
 
+1. Analyze the provided faulty code and the associated error message to understand the issue.  
+2. Fix **only** the faulty part of the code while keeping the rest unchanged.  
 
-    please reflect on the errors of the AI agent and then generate a 
-   correct step-by-step solution to the problem.
-   You are logged in streamlit use st.write instead of print
+Additional requirements:  
+- Ensure the corrected code performs the intended analysis as described by the user.  
+- Since the environment is Streamlit, use `st.write` instead of `print`.  
+- Output **only the corrected code** without any additional explanation or comments.  
+- Ensure the final code runs end-to-end without errors.  
 
-
+Make your fixes precise and reliable.
     """
     faulty_code = dspy.InputField(desc="The faulty code that did not work")
-    previous_code_fixes = dspy.InputField(desc="User adds additional context that might help solve the problem")
     error = dspy.InputField(desc="The error generated")
-
-    faulty_code = dspy.OutputField(desc="Only include the faulty code here")
     fixed_code= dspy.OutputField(desc="The fixed code")
 
 
