@@ -9,6 +9,12 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
 
 
+df = pd.read_csv('Housing.csv')
+
+desc="Housing Dataset"
+
+dict_ = make_data(df,desc)
+doc = [str(dict_)]
 
 def initiatlize_retrievers(_styling_instructions, _doc):
     retrievers ={}
@@ -20,7 +26,7 @@ def initiatlize_retrievers(_styling_instructions, _doc):
 
 
 
-retrievers = {}
+retrievers = initiatlize_retrievers(styling_instructions,doc)
 
 
 AVAILABLE_AGENTS = {
@@ -30,7 +36,18 @@ AVAILABLE_AGENTS = {
     "preprocessing_agent":preprocessing_agent
 }
 
+
+
+
 ai_system = auto_analyst(agents=list(AVAILABLE_AGENTS.values()),retrievers=retrievers)
+
+@app.route('/upload_dataframe', methods=['POST'])
+def upload_dataframe():
+    data = request.get_json()
+    df = pd.read_csv(data['file'])
+    retrievers = initiatlize_retrievers(data['styling_instructions'], df)
+    return jsonify({"message": "Dataframe uploaded successfully"}), 200
+
 # Get all queries
 @app.route('/queries', methods=['GET'])
 def get_queries():
@@ -104,7 +121,7 @@ def chat_with_all():
         
         # Save response
         response = Response(
-            agent_name=agent_name,
+            agent_name=agent_name, 
             query=query_text,
             response=response_text
         )
@@ -117,5 +134,11 @@ def chat_with_all():
 
 
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"message": "Hello World"}), 200
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({"message": "Hello World"}), 200

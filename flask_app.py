@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 from dotenv import load_dotenv
 import os
+# from routes import *
 
 load_dotenv()
 
@@ -28,4 +29,5 @@ db = SQLAlchemy(app)
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    print("Starting Flask App")
+    app.run(debug=False, port=5000)
