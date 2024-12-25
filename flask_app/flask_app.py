@@ -36,7 +36,7 @@ with app.app_context():
 
 if __name__ == '__main__':
     print("Starting Flask App")
-    dspy.LM(model="gpt-4o-mini",api_key=os.getenv("OPENAI_API_KEY"),temperature=0,max_tokens=1000)
+    dspy.configure(lm=dspy.LM(model="gpt-4o-mini",api_key=os.getenv("OPENAI_API_KEY"),temperature=0,max_tokens=1000))
     # print(app.config['SQLALCHEMY_DATABASE_URI'])
     # os.environ['FLASK_APP'] = 'flask_app.py'
     app.run(debug=True, port=5000)
