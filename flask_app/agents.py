@@ -1,5 +1,4 @@
 import dspy
-import streamlit as st
 import memory_agents as m
 
 # Contains the DSPy agents
@@ -70,10 +69,7 @@ def safe_to_datetime(date):
 df['datetime_column'] = df['datetime_column'].apply(safe_to_datetime)
 
 You will be given recent history as a hint! Use that to infer what the user is saying
-You are logged in streamlit use st.write instead of print
 If visualizing use plotly
-
-
 
     """
     dataset = dspy.InputField(desc="Available datasets loaded in the system, use this df, column_names  set df as copy of df")
@@ -159,7 +155,6 @@ print(result)
 
 
     You may be give recent agent interactions as a hint! With the first being the latest
-    You are logged in streamlit use st.write instead of print
 If visualizing use plotly
 
 
@@ -180,7 +175,6 @@ class sk_learn_agent(dspy.Signature):
     Make sure your output is as intended!
 
     You may be give recent agent interactions as a hint! With the first being the latest
-    You are logged in streamlit use st.write instead of print
 
     
     """
@@ -206,15 +200,13 @@ class code_combiner_agent(dspy.Signature):
 
     Double check column_names/dtypes using dataset, also check if applied logic works for the datatype
     df.copy = df.copy()
-    Change print to st.write
     Also add this to display Plotly chart
-    st.plotly_chart(fig, use_container_width=True)
+    fig.show()
 
 
 
     Make sure your output is as intended!
         You may be give recent agent interactions as a hint! With the first being the latest
-    You are logged in streamlit use st.write instead of print
 
 
     """
@@ -245,7 +237,6 @@ class data_viz_agent(dspy.Signature):
     You may be give recent agent interactions as a hint! With the first being the latest
     DONT INCLUDE GOAL/DATASET/STYLING INDEX IN YOUR OUTPUT!
     You can add trendline into a scatter plot to show it changes,only if user mentions for it in the query!
-    You are logged in streamlit use st.write instead of print
 
     """
     goal = dspy.InputField(desc="user defined goal which includes information about data and chart they want to plot")
@@ -266,7 +257,6 @@ You are an AI specializing in fixing faulty data analytics code provided by anot
 
 Additional requirements:  
 - Ensure the corrected code performs the intended analysis as described by the user.  
-- Since the environment is Streamlit, use `st.write` instead of `print`.  
 - Output **only the corrected code** without any additional explanation or comments.  
 - Ensure the final code runs end-to-end without errors.  
 
@@ -315,10 +305,10 @@ class auto_analyst_ind(dspy.Module):
         dict_['dataset'] = self.dataset.retrieve(query)[0].text
         dict_['styling_index'] = self.styling_index.retrieve(query)[0].text
         # short_term memory is stored as hint
-        dict_['hint'] = st.session_state.st_memory
+        dict_['hint'] = []
         dict_['goal']=query
         dict_['Agent_desc'] = str(self.agent_desc)
-        st.write(f"User choose this {specified_agent} to answer this ")
+        print(f"User choose this {specified_agent} to answer this ")
 
 
         inputs = {x:dict_[x] for x in self.agent_inputs[specified_agent.strip()]}
@@ -331,13 +321,10 @@ class auto_analyst_ind(dspy.Module):
         # loops through the output Prediction object (converted as dict)
         for x in dict(output_dict[specified_agent.strip()]).keys():
             if x!='rationale':
-                st.code(f"{specified_agent.strip()}[{x}]: {str(dict(output_dict[specified_agent.strip()])[x]).replace('#','#######')}")
-                #append in messages for streamlit
-                st.session_state.messages.append(f"{specified_agent.strip()}[{x}]: {str(dict(output_dict[specified_agent.strip()])[x])}")
+                print(f"{specified_agent.strip()}[{x}]: {str(dict(output_dict[specified_agent.strip()])[x]).replace('#','#######')}")
+
         #sends agent output to memory
         output_dict['memory_'+specified_agent.strip()] = str(self.memory_summarize_agent(agent_response=specified_agent+' '+output_dict[specified_agent.strip()]['code']+'\n'+output_dict[specified_agent.strip()]['commentary'], user_goal=query).summary)
-        # adds agent action summary as memory
-        st.session_state.st_memory.insert(0,f"{'memory_'+specified_agent.strip()} : {output_dict['memory_'+specified_agent.strip()]}")
 
 
         return output_dict
@@ -391,7 +378,7 @@ class auto_analyst(dspy.Module):
         dict_['dataset'] = self.dataset.retrieve(query)[0].text
         dict_['styling_index'] = self.styling_index.retrieve(query)[0].text
         # short_term memory is stored as hint
-        dict_['hint'] = st.session_state.st_memory
+        dict_['hint'] = []
         dict_['goal']=query
         dict_['Agent_desc'] = str(self.agent_desc)
         #percent complete is just a streamlit component
@@ -399,18 +386,12 @@ class auto_analyst(dspy.Module):
         # output dict stores all the information needed
 
         output_dict ={}
-        #tracks the progress
-        my_bar = st.progress(0, text="**Planner Agent Working on devising a plan**")
         # sends the query to the planner agent to come up with a plan
         plan = self.planner(goal =dict_['goal'], dataset=dict_['dataset'], Agent_desc=dict_['Agent_desc'] )
-        st.write("**This is the proposed plan**")
-        st.session_state.messages.append(f"planner['plan']: {plan['plan']}")
-        st.session_state.messages.append(f"planner['plan_desc']: {plan['plan_desc']}")
+        print("**This is the proposed plan**")
 
         len_ = len(plan.plan.split('->'))+2
         percent_complete += 1/len_
-        my_bar.progress(percent_complete, text=" Delegating to Agents")
-
 
         output_dict['analytical_planner'] = plan
         plan_list =[]
@@ -420,14 +401,12 @@ class auto_analyst(dspy.Module):
         if plan.plan.split('->'):
             plan_text = plan.plan
             plan_text = plan.plan.replace('Plan','').replace(':','').strip()
-            st.write(plan_text)
-            st.write(plan.plan_desc)
+            print(plan_text)
+            print(plan.plan_desc)
             plan_list = plan_text.split('->')
         else:
             # if the planner agent fails at routing the query to any agent this is triggered
             refined_goal = self.refine_goal(dataset=dict_['dataset'], goal=dict_['goal'], Agent_desc= dict_['Agent_desc'])
-            st.session_state.messages.append(f"refined_goal: {refined_goal.refined_goal}")
-
             self.forward(query=refined_goal.refined_goal)
        #Loops through all of the agents in the plan
         for p in plan_list:
@@ -436,28 +415,19 @@ class auto_analyst(dspy.Module):
             output_dict[p.strip()]=self.agents[p.strip()](**inputs)
             code = output_dict[p.strip()].code
             
-            # st.write("This is the generated Code"+ code)
             commentary = output_dict[p.strip()].commentary
-            st.write('**'+p.strip().capitalize().replace('_','  ')+' -  is working on this analysis....**')
-            st.session_state.messages.append(f"{p.strip()}['code']: {output_dict[p.strip()].code}")
-            st.session_state.messages.append(f"{p.strip()}['commentary']: {output_dict[p.strip()].commentary}")
+            print('**'+p.strip().capitalize().replace('_','  ')+' -  is working on this analysis....**')
 
-
-            st.write(commentary.replace('#',''))
-            st.code(code)
+            print(commentary.replace('#',''))
+            print(code)
             percent_complete += 1/len_
-            my_bar.progress(percent_complete)
             # stores each of the individual agents code and commentary into seperate lists
             code_list.append(code)
             analysis_list.append(commentary)
-        st.write("Combining all code into one")
+        print("Combining all code into one")
         output_dict['code_combiner_agent'] = self.code_combiner_agent(agent_code_list = str(code_list), dataset=dict_['dataset'])
-        st.session_state.messages.append(f"code_combiner_agent: {output_dict['code_combiner_agent']}")
-        my_bar.progress(percent_complete + 1/len_, text=" Combining WorkFlow")
 
-        my_bar.progress(100, text=" Compiling the story")
         # creates a summary from code_combiner agent
         output_dict['memory_combined'] = str(self.memory_summarize_agent(agent_response='code_combiner_agent'+'\n'+str(output_dict['code_combiner_agent'].refined_complete_code), user_goal=query).summary)
-        st.session_state.st_memory.insert(0,f"{'memory_combined'} : {output_dict['memory_combined']}")
 
         return output_dict
