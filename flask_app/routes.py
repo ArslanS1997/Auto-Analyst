@@ -103,7 +103,7 @@ def chat_with_agent(agent_name):
             id=db.session.query(Response).count() + 1,
             agent_name=agent_name,
             query=query_text,
-            response=response_text
+            response=str(response_text),
             created_at=db.func.now()
 
         )
