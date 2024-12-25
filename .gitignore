@@ -1,6 +1,6 @@
 # Ignore auto_analyst folder
 auto_analyst/
-__pycache__/
+__pycache__
 
 # Ignore node_modules folder
 node_modules/
@@ -15,7 +15,8 @@ instance/
 
 React Frontend/autoanalyst_frontend/
 
-flask_app/_pycache__/
-flask_app/instance/
+flask_app/_pycache__
+flask_app/instance
 flask_app/.env
 .env
+__pycache__
