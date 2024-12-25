@@ -9,7 +9,12 @@ from llama_index.core import Document
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
+import os
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 dspy.configure(lm=dspy.LM(model="gpt-4o-mini",api_key=os.getenv("OPENAI_API_KEY"),temperature=0,max_tokens=1000))
 
