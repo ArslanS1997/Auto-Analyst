@@ -108,9 +108,15 @@ def chat_with_agent(agent_name):
 # Chat with all agents
 @app.route('/chat', methods=['POST'])
 def chat_with_all():
+    """
+    Example request body in Postman:
+
+    
+    Send as JSON (raw) with Content-Type: application/json header
+    """
     data = request.json
     query_text = data.get('query')
-    
+    print(query_text)
     # Save query
     query = Query(query=query_text)
     db.session.add(query)
@@ -119,19 +125,18 @@ def chat_with_all():
     responses = []
     
     # Get response from each agent
-    for agent_name, agent_class in AVAILABLE_AGENTS.items():
-        agent = agent_class()
-        response_text = agent.generate_response(query_text)
-        
-        # Save response
-        response = Response(
-            agent_name=agent_name, 
-            query=query_text,
-            response=response_text
-        )
-        db.session.add(response)
-        responses.append(response)
-    
+    response_text = ai_system(query_text)
+
+    # Save response
+    response = Response(
+        id=db.session.query(Response).count() + 1,
+        agent_name="ai_system",
+        query=query_text,
+        response=str(response_text),
+        created_at=db.func.now()
+    )
+    db.session.add(response)
+
     db.session.commit()
     
     return jsonify([response.to_json() for response in responses]), 201

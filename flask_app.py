@@ -9,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 # import pandas as pd
 from dotenv import load_dotenv
 import os
-import routes
 
 load_dotenv()
 
@@ -28,6 +27,7 @@ app.config["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 
 db = SQLAlchemy(app)
+import routes
 
 with app.app_context():
   db.create_all()
