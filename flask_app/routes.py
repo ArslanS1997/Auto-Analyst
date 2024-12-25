@@ -117,12 +117,7 @@ def chat_with_agent(agent_name):
 # Chat with all agents
 @app.route('/chat', methods=['POST'])
 def chat_with_all():
-    """
-    Example request body in Postman:
 
-    
-    Send as JSON (raw) with Content-Type: application/json header
-    """
     data = request.json
     query_text = data.get('query')
     print(query_text)
@@ -175,4 +170,3 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-print("WORKING")
