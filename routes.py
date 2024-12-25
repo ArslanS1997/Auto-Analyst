@@ -1,9 +1,10 @@
-from app import app, db
+from flask_app import app, db
 from flask import request, jsonify,send_from_directory
+
 # from flask import Flask, request, jsonify
 from agents import *
 from retrievers import *
-from db_models import *
+from db_models import Response,Query
 from llama_index.core import Document
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import VectorStoreIndex
