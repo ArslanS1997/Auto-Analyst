@@ -17,6 +17,6 @@ React Frontend/autoanalyst_frontend/
 
 flask_app/_pycache__
 flask_app/instance
-flask_app/.env
-.env
+flask_app/*.env
+*.env
 __pycache__
