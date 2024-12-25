@@ -1,4 +1,4 @@
-from flask_app import app, db
+from app import app, db
 from flask import request, jsonify,send_from_directory
 # from flask import Flask, request, jsonify
 from agents import *
@@ -78,7 +78,7 @@ def get_responses_by_query(query_id):
 # Chat with specific agent
 @app.route('/chat/<agent_name>', methods=['POST'])
 def chat_with_agent(agent_name):
-    data = request.get_json()
+    data = request.json
     query_text = data.get('query')
     
     # Save query
@@ -107,7 +107,7 @@ def chat_with_agent(agent_name):
 # Chat with all agents
 @app.route('/chat', methods=['POST'])
 def chat_with_all():
-    data = request.get_json()
+    data = request.json
     query_text = data.get('query')
     
     # Save query

@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 # import pandas as pd
 from dotenv import load_dotenv
 import os
-# from routes import *
+import routes
 
 load_dotenv()
 
@@ -17,7 +17,9 @@ load_dotenv()
 
 app = Flask(__name__)
 # Remove CORS initialization
-cors = CORS(app, origins='*')
+# cors = CORS(app, origins='*')
+
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///response.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
@@ -32,5 +34,15 @@ with app.app_context():
 
 if __name__ == '__main__':
     print("Starting Flask App")
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
+    # print(app.config['SQLALCHEMY_DATABASE_URI'])
+    # os.environ['FLASK_APP'] = 'flask_app.py'
     app.run(debug=True, port=5000)
+
+
+    # Set the Flask application environment variable
+    
+
+    # You can now run the app using:
+    # flask run --port 5000
+    # Or with debug mode:
+    # flask run --debug --port 5000
