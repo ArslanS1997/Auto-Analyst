@@ -1,5 +1,6 @@
 from flask_app import app, db
-from flask import request, jsonify
+from flask import request, jsonify,send_from_directory
+# from flask import Flask, request, jsonify
 from agents import *
 from retrievers import *
 from db_models import *
@@ -7,6 +8,8 @@ from llama_index.core import Document
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
+
+
 
 
 df = pd.read_csv('Housing.csv')
@@ -139,6 +142,22 @@ def health():
     return jsonify({"message": "Hello World"}), 200
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    return jsonify({"message": "Hello World"}), 200
+    return jsonify({
+        "title": "Welcome to the API",
+        "message": "Hello World",
+        "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d",
+            "success": "#28a745",
+            "danger": "#dc3545"
+        }
+    }), 200
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+print("WORKING")
