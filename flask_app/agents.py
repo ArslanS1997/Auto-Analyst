@@ -370,64 +370,65 @@ class auto_analyst(dspy.Module):
         self.styling_index = retrievers['style_index'].as_retriever(similarity_top_k=1)
         
     def forward(self, query):
-        dict_ ={}
-        
-        # output_dict 
-        dict_ ={}
-        #dict_ is temporary store to be used as input into the agent(s)
-        dict_['dataset'] = self.dataset.retrieve(query)[0].text
-        dict_['styling_index'] = self.styling_index.retrieve(query)[0].text
-        # short_term memory is stored as hint
-        dict_['hint'] = []
-        dict_['goal']=query
-        dict_['Agent_desc'] = str(self.agent_desc)
-        #percent complete is just a streamlit component
-        percent_complete =0
-        # output dict stores all the information needed
+        try:
+            # output_dict 
+            dict_ ={}
+            #dict_ is temporary store to be used as input into the agent(s)
+            dict_['dataset'] = self.dataset.retrieve(query)[0].text
+            dict_['styling_index'] = self.styling_index.retrieve(query)[0].text
+            # short_term memory is stored as hint
+            dict_['hint'] = []
+            dict_['goal']=query
+            dict_['Agent_desc'] = str(self.agent_desc)
+            #percent complete is just a streamlit component
+            percent_complete =0
+            # output dict stores all the information needed
 
-        output_dict ={}
-        # sends the query to the planner agent to come up with a plan
-        plan = self.planner(goal =dict_['goal'], dataset=dict_['dataset'], Agent_desc=dict_['Agent_desc'] )
-        print("**This is the proposed plan**")
+            output_dict ={}
+            # sends the query to the planner agent to come up with a plan
+            plan = self.planner(goal =dict_['goal'], dataset=dict_['dataset'], Agent_desc=dict_['Agent_desc'] )
+            print("**This is the proposed plan**")
 
-        len_ = len(plan.plan.split('->'))+2
-        percent_complete += 1/len_
-
-        output_dict['analytical_planner'] = plan
-        plan_list =[]
-        code_list =[]
-        analysis_list = [plan.plan,plan.plan_desc]
-        #splits the plan and shows it to the user
-        if plan.plan.split('->'):
-            plan_text = plan.plan
-            plan_text = plan.plan.replace('Plan','').replace(':','').strip()
-            print(plan_text)
-            print(plan.plan_desc)
-            plan_list = plan_text.split('->')
-        else:
-            # if the planner agent fails at routing the query to any agent this is triggered
-            refined_goal = self.refine_goal(dataset=dict_['dataset'], goal=dict_['goal'], Agent_desc= dict_['Agent_desc'])
-            self.forward(query=refined_goal.refined_goal)
-       #Loops through all of the agents in the plan
-        for p in plan_list:
-            # fetches the inputs
-            inputs = {x:dict_[x] for x in self.agent_inputs[p.strip()]}
-            output_dict[p.strip()]=self.agents[p.strip()](**inputs)
-            code = output_dict[p.strip()].code
-            
-            commentary = output_dict[p.strip()].commentary
-            print('**'+p.strip().capitalize().replace('_','  ')+' -  is working on this analysis....**')
-
-            print(commentary.replace('#',''))
-            print(code)
+            len_ = len(plan.plan.split('->'))+2
             percent_complete += 1/len_
-            # stores each of the individual agents code and commentary into seperate lists
-            code_list.append(code)
-            analysis_list.append(commentary)
-        print("Combining all code into one")
-        output_dict['code_combiner_agent'] = self.code_combiner_agent(agent_code_list = str(code_list), dataset=dict_['dataset'])
 
-        # creates a summary from code_combiner agent
-        output_dict['memory_combined'] = str(self.memory_summarize_agent(agent_response='code_combiner_agent'+'\n'+str(output_dict['code_combiner_agent'].refined_complete_code), user_goal=query).summary)
+            output_dict['analytical_planner'] = dict(plan)
+            plan_list =[]
+            code_list =[]
+            analysis_list = [plan.plan,plan.plan_desc]
+            #splits the plan and shows it to the user
+            if plan.plan.split('->'):
+                plan_text = plan.plan
+                plan_text = plan.plan.replace('Plan','').replace(':','').strip()
+                print(plan_text)
+                print(plan.plan_desc)
+                plan_list = plan_text.split('->')
+            # else:
+            #     # if the planner agent fails at routing the query to any agent this is triggered
+            #     refined_goal = dict(self.refine_goal(dataset=dict_['dataset'], goal=dict_['goal'], Agent_desc= dict_['Agent_desc']))
+            #     self.forward(query=refined_goal.refined_goal)
+           #Loops through all of the agents in the plan
+            for p in plan_list:
+                # fetches the inputs
+                inputs = {x:dict_[x] for x in self.agent_inputs[p.strip()]}
+                output_dict[p.strip()]=dict(self.agents[p.strip()](**inputs))
+                code = output_dict[p.strip()]['code']
+                
+                commentary = output_dict[p.strip()]['commentary']
+                print('**'+p.strip().capitalize().replace('_','  ')+' -  is working on this analysis....**')
+
+                print(commentary.replace('#',''))
+                print(code)
+                percent_complete += 1/len_
+                # stores each of the individual agents code and commentary into seperate lists
+                code_list.append(code)
+                analysis_list.append(commentary)
+            print("Combining all code into one")
+            output_dict['code_combiner_agent'] = dict(self.code_combiner_agent(agent_code_list = str(code_list), dataset=dict_['dataset']))
+
+            # creates a summary from code_combiner agent
+            # output_dict['memory_combined'] = str(self.memory_summarize_agent(agent_response='code_combiner_agent'+'\n'+str(output_dict['code_combiner_agent'].refined_complete_code), user_goal=query).summary)
+        except Exception as e:
+            output_dict = {"response": "This is the error from the system"+str(e)}
 
         return output_dict

@@ -40,10 +40,10 @@ retrievers = initiatlize_retrievers(styling_instructions,doc)
 
 
 AVAILABLE_AGENTS = {
-    "data_viz_agent":data_viz_agent,
-    "sk_learn_agent":sk_learn_agent,
-    "statistical_analytics_agent":statistical_analytics_agent,
-    "preprocessing_agent":preprocessing_agent
+    "data_viz_agent":dspy.ChainOfThought(data_viz_agent)    ,
+    "sk_learn_agent":dspy.ChainOfThought(sk_learn_agent),
+    "statistical_analytics_agent":dspy.ChainOfThought(statistical_analytics_agent),
+    "preprocessing_agent":dspy.ChainOfThought(preprocessing_agent)
 }
 
 
@@ -94,15 +94,18 @@ def chat_with_agent(agent_name):
     db.session.commit()
     
     # Generate response using agent
-    if agent_name in AVAILABLE_AGENTS:
-        agent = AVAILABLE_AGENTS[agent_name]()
-        response_text = agent.generate_response(query_text)
+    if agent_name in AVAILABLE_AGENTS.keys():
+        agent = AVAILABLE_AGENTS[agent_name]
+        response_text = agent(query_text)
         
         # Save response
         response = Response(
+            id=db.session.query(Response).count() + 1,
             agent_name=agent_name,
             query=query_text,
             response=response_text
+            created_at=db.func.now()
+
         )
         db.session.add(response)
         db.session.commit()
@@ -145,7 +148,7 @@ def chat_with_all():
 
     db.session.commit()
     
-    return jsonify([response.to_json() for response in responses]), 201
+    return jsonify(response.to_json()), 201
 
 
 
